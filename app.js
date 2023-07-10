@@ -22,8 +22,6 @@ const flash = require('connect-flash');
 // const Visitor = require('./models/visitor');
 
 
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
@@ -41,7 +39,6 @@ app.use(session({
  app.use(flash());
  app.use(passport.initialize());
 app.use(passport.session());
-
 
 
 app.use(cors());
