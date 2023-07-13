@@ -5,6 +5,35 @@ const Table = require("../models/table");
 const Invoice = require("../models/invoice");
 // Route: Add food to an invoice and handle invoice creation if needed
 const Setting = require("../models/pagesetting");
+const nodeHtmlToImage = require('node-html-to-image')
+const { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } = require('node-thermal-printer');
+
+async function printImageAsync(imagePath) {
+  const printer = new ThermalPrinter({
+    type: PrinterTypes.EPSON,
+    interface: 'tcp://192.168.123.100:9100',
+    characterSet: CharacterSet.SLOVENIA,
+    removeSpecialCharacters: false,
+    lineCharacter: "=",
+    breakLine: BreakLine.WORD,
+    options: {
+      timeout: 5000
+    }
+  });
+
+  try {
+    await printer.printImage(imagePath);  // Print PNG image
+    await printer.cut();
+    await printer.execute();
+    console.log('Image printed successfully.');
+  } catch (error) {
+    console.error('Error printing image:', error);
+  }
+}
+
+
+
+
 
 router.get('/list', async (req, res) => {
   try {
@@ -200,17 +229,17 @@ router.post('/price', async (req, res) => {
 
 router.post('/previesinvoice', async (req, res) => {
   try {
-   const table = await Table.findById(req.body.tableId)
-   console.log(table)
-   if(table.invoice.length > 0){
-    return res.json({Massage : "table have invoice",reloded:false})
-   }else{
-    table.invoice.push(table.lastinvoice)
-    table.save()
-    
-    res.json({Massage : "loaded old invoice",reloded:true,lastinvoiceid : table.lastinvoice})
+    const table = await Table.findById(req.body.tableId)
+    console.log(table)
+    if (table.invoice.length > 0) {
+      return res.json({ Massage: "table have invoice", reloded: false })
+    } else {
+      table.invoice.push(table.lastinvoice)
+      table.save()
 
-   }
+      res.json({ Massage: "loaded old invoice", reloded: true, lastinvoiceid: table.lastinvoice })
+
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -301,9 +330,21 @@ router.post('/finish', async (req, res) => {
 router.post('/printinvoice', async (req, res) => {
   try {
 
-    htmlpage = req.body.htmlbody;
+    htmlpage = req.body.htmbody;
+    nodeHtmlToImage({
+      output: './image.png',
+      html: htmlpage,
+      type: 'png',
+      selector: 'main',
+    })
+      .then(() => {
+        console.log(done);
+        printImageAsync('./image.png')
+      })
+    console.log(htmlpage)
 
 
+    res.status('200').json({ msg: "done" })
   } catch (err) {
     console.error(err);
     return res.json({ message: 'No invoice found in the table', err });
@@ -355,8 +396,6 @@ router.get('/:invoiceId/checout', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-
-
 
 router.delete('/:tableId/:invoiceId/food/:foodId', async (req, res) => {
   try {

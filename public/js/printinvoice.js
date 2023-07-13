@@ -39,6 +39,11 @@ function printinvoice(invoiceId) {
                         font-size: 12px;
                         font-family: 'Times New Roman';
                     }
+                    body{
+                        width: 240px;
+                        max-width: 240px;
+                        height: 100%;
+                    }
                 
                     .footerpos {
                         display: flex;
@@ -87,8 +92,11 @@ function printinvoice(invoiceId) {
                         text-align: center;
                         align-content: center;
                     }
-                
+                    main{
+                        padding: 6px
+                    }
                     .ticket {
+                        padding: 6px;
                         width: 240px;
                         max-width: 240px;
                     }
@@ -126,7 +134,7 @@ function printinvoice(invoiceId) {
             
 
             <body>
-                <div class="ticket">
+                <main class="ticket">
                     <div class="logoimg">
                         <img src="${data.setting.shoplogo}" alt="Logo">
                     </div>
@@ -184,7 +192,26 @@ function printinvoice(invoiceId) {
             
             </html>
             `
-console.log(htmltoprint)
+            console.log(htmltoprint)
+
+
+            fetch("/invoice/printinvoice/", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({htmbody: htmltoprint})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors
+                });
+
 
         })
         .catch(error => {
