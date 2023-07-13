@@ -39,11 +39,6 @@ function printinvoice(invoiceId) {
                         font-size: 12px;
                         font-family: 'Times New Roman';
                     }
-                    body{
-                        width: 240px;
-                        max-width: 240px;
-                        height: 100%;
-                    }
                 
                     .footerpos {
                         display: flex;
@@ -93,12 +88,14 @@ function printinvoice(invoiceId) {
                         align-content: center;
                     }
                     main{
-                        padding: 6px
+                        padding: 6px;
+                        width: 440px;
+
                     }
                     .ticket {
                         padding: 6px;
-                        width: 240px;
-                        max-width: 240px;
+                        width: 440px;
+                        max-width: 440px;
                     }
                 
                     .logoimg {
@@ -129,9 +126,6 @@ function printinvoice(invoiceId) {
                 </style>
                 
             </head>
-            
-
-            
 
             <body>
                 <main class="ticket">

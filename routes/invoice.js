@@ -31,10 +31,6 @@ async function printImageAsync(imagePath) {
   }
 }
 
-
-
-
-
 router.get('/list', async (req, res) => {
   try {
     const invoice = await Invoice.find()
@@ -246,7 +242,6 @@ router.post('/previesinvoice', async (req, res) => {
   }
 });
 
-
 router.post('/cancele', async (req, res) => {
   try {
     let invoice = await Invoice.findById(req.body.invoiceId);
@@ -336,6 +331,7 @@ router.post('/printinvoice', async (req, res) => {
       html: htmlpage,
       type: 'png',
       selector: 'main',
+      
     })
       .then(() => {
         console.log("done");
