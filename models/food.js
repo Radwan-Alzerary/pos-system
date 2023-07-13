@@ -9,21 +9,21 @@ const FoodSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        url: { type: String}
+        url: { type: String }
     },
     active: {
         type: Boolean, default: true
     },
-    unlimit:{
-        type:Boolean,default:true
+    unlimit: {
+        type: Boolean, default: true
     },
-    quantety : {
+    quantety: {
         type: Number, default: 0
     },
-    addeduse:{
-        type: mongoose.Schema.Types.ObjectId, ref: 'User' 
-    },deleted:{
-        type:Boolean,default:false
+    addeduse: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }, deleted: {
+        type: Boolean, default: false
     }
 }, {
     timestamps: true

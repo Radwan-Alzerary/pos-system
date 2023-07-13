@@ -6,26 +6,29 @@
                 style="height: 90vh;">
                 <%if(table[0]){%>
                     <%table.forEach(function(tables,index) { %>
-                        <a href="/cashier/menu?tableid=<%=tables.id%>" class="group  text-cente ">
-                            <div
-                                class="hover:bg-slate-200<%if(tables.invoice[0]){%> bg-green-200 <%}else{%> bg-white<%}%> aspect-h-1  aspect-w-1 w-full  overflow-hidden rounded-lg  xl:aspect-h-5 xl:aspect-w-5">
-                                <div class="text-center flex flex-col justify-center items-center">
-                                    <img class="w-3/4 h-3/4 mx-auto" src="/img/websiteimg/table.svg">
-                                    <p class="text-black font-bold">طاولة رقم : <%=tables.number%>
-                                    </p>
+                        <% if (tables.number> 100) {
+                            return; // Stop the forEach loop
+                            }
+                            %>
+                            <a href="/cashier/menu?tableid=<%=tables.id%>" class="group  text-cente ">
+                                <div
+                                    class="hover:bg-slate-200<%if(tables.invoice[0]){%> bg-green-200 <%}else{%> bg-white<%}%> aspect-h-1  aspect-w-1 w-full  overflow-hidden rounded-lg  xl:aspect-h-5 xl:aspect-w-5">
+                                    <div class="text-center flex flex-col justify-center items-center">
+                                        <img class="w-3/4 h-3/4 mx-auto" src="/img/websiteimg/table.svg">
+                                        <p class="text-black font-bold">طاولة رقم : <%=tables.number%>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <%})}else{%>
-                            <div
-                                class="h-8 cursor-pointer flex items-center p-3 hover:bg-orange-300 bg-orange-100   rounded-xl ">
-                                لا يوجد طاولات
-                            </div>
-                            <%}%>
-
-                                <!-- More products... -->
+                            </a>
+                            <%})}else{%>
+                                <div
+                                    class="h-8 cursor-pointer flex items-center p-3 hover:bg-orange-300 bg-orange-100   rounded-xl ">
+                                    لا يوجد طاولات
+                                </div>
+                                <%}%>
+                                    <!-- More products... -->
             </div>
         </div>
     </div>
 
-    <%- include('footer'); %>
+    <%- include('footer',{currentpage:'cashier'}); %>

@@ -14,7 +14,6 @@ const TableSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'Invoice'
     }],
     lastinvoice: { type: mongoose.Schema.Types.ObjectId, ref: 'Invoice' }
-
 }
     , {
         timestamps: true

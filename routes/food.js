@@ -25,13 +25,25 @@ router.get('/', async (req, res) => {
   res.render('food', { category });
 })
 
+router.patch('/:foodId/active/', async (req, res) => {
+  try {
+    const food = await Food.findById(req.params.foodId);
+    food.active = !food.active
+    const newfood = await food.save();
+    res.status(200).json({active : newfood.active});
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
 router.post('/addcategory', async (req, res) => {
   const feedCategory = new Category({
     name: req.body.category,
   });
   try {
     const newfeedCategory = await feedCategory.save();
-    res.status(201).json(newfeedCategory);
+    res.status(201).redirect('/food');
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -81,13 +93,43 @@ router.post('/editfood', upload.single('image'), async (req, res) => {
 router.delete('/:foodId/foodremove', async (req, res) => {
   // console.log(req.params.foodId)
   try {
-    const food = await Food.findById(req.params.foodId);
-    food.deleted=true
+    ids = JSON.parse(req.params.foodId)
+    console.log(ids)
+    const food = await Food.findById(ids.foodid);
+    const updatedCatacory = await Category.findByIdAndUpdate(
+      ids.categoryid,
+      { $pull: { foods: ids.foodid } },
+      { new: true }
+    );
+    if (!updatedCatacory) {
+      return res.status(404).json({ message: 'categoryid or food item not found' });
+    }
+
+    // console.log(updatedInvoice)
+
+    food.deleted = true
     await food.save();
-    res.redirect("/food")
+    res.sendStatus(200);
   } catch (err) {
     console.error(err);
-    res.redirect("/food")
+    res.sendStatus(500);
+  }
+});
+
+router.delete('/:catacotyid/removecatogary', async (req, res) => {
+  try {
+
+    const category = await Category.findByIdAndRemove(req.params.catacotyid);
+
+    if (!category) {
+      return res.status(404).send("Category not found");
+    }
+
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
   }
 });
 

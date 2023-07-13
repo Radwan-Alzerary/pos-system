@@ -5,7 +5,7 @@ const Table = require("../models/table");
 
 router.get('/', async (req, res) => {
     const category = await Category.find().populate("foods");
-    const table = await Table.find();
+    const table = await Table.find().sort({ number: 1 }); // Sort the tables by number in ascending order
     console.log(category)
     res.render('cashier-table', { category, table });
 })

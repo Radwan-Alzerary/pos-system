@@ -10,7 +10,8 @@ const SettingSchema = new mongoose.Schema({
         type: String
     },
     adress: { type: String },
-    phonnumber: { type: Number }
+    phonnumber: { type: Number },
+    deleverytable : { type: mongoose.Schema.Types.ObjectId, ref: 'Table' }
 }, {
     timestamps: true
 });

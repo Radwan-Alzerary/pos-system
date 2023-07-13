@@ -19,7 +19,6 @@ router.get('/list', async (req, res) => {
 
 router.post('/food', async (req, res) => {
   try {
-    let alredyfoodid = "";
     let existingFoodcheck = 0;
     const tableId = req.body.tableId;
     const { foodId, quantity, discount, discountType } = req.body;
@@ -105,7 +104,7 @@ router.post('/food', async (req, res) => {
         message: 'Food added to the invoice successfully',
         food: populatedFood,
         invoiceId: invoice.id,
-        newquantity:1
+        newquantity: 1
       });
     }
   } catch (err) {
@@ -130,7 +129,7 @@ router.post('/changequantity', async (req, res) => {
     if (!foodItem) {
       return res.status(404).json({ error: 'Food item not found in the invoice.' });
     }
-    console.log(foodItem)
+    // console.log(foodItem)
     foodItem.quantity = quantity;
 
     // Save the updated invoice
@@ -148,7 +147,8 @@ router.post('/changequantity', async (req, res) => {
 router.post('/changedescount', async (req, res) => {
   try {
     const discount = req.body.discount
-    const invoiceid = req.body. invoiceId
+    const invoiceid = req.body.invoiceId
+
     let invoice = await Invoice.findById(invoiceid);
 
     invoice.discount = discount;
@@ -175,7 +175,7 @@ router.post('/price', async (req, res) => {
     let total = 0;
     let totaldiscount = 0
     for (const food of invoice.food) {
-      console.log(food)
+      // console.log(food)
 
       const quantity = food.quantity;
       const discount = food.discount;
@@ -183,13 +183,13 @@ router.post('/price', async (req, res) => {
       total += price * quantity;
       totaldiscount += discount * quantity;
     }
-    if(invoice.discount >=0){
+    if (invoice.discount >= 0) {
       totaldiscount += invoice.discount
 
     }
     finalprice = total - totaldiscount;
-    if(finalprice<0){
-      finalprice=0;
+    if (finalprice < 0) {
+      finalprice = 0;
     }
     res.json({ total, totaldiscount, finalprice });
   } catch (error) {
@@ -198,10 +198,30 @@ router.post('/price', async (req, res) => {
   }
 });
 
+router.post('/previesinvoice', async (req, res) => {
+  try {
+   const table = await Table.findById(req.body.tableId)
+   console.log(table)
+   if(table.invoice.length > 0){
+    return res.json({Massage : "table have invoice",reloded:false})
+   }else{
+    table.invoice.push(table.lastinvoice)
+    table.save()
+    
+    res.json({Massage : "loaded old invoice",reloded:true,lastinvoiceid : table.lastinvoice})
+
+   }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 router.post('/cancele', async (req, res) => {
   try {
     let invoice = await Invoice.findById(req.body.invoiceId);
-    console.log(req.body);
+    // console.log(req.body);
     invoice.active = false;
     invoice.type = "cancled";
     invoice.fullcost = req.body.totalcost;
@@ -209,14 +229,22 @@ router.post('/cancele', async (req, res) => {
     invoice.finalcost = req.body.finalcost;
     invoice.tableid = req.body.tableId;
     invoice.progressdata = Date.now();
+
+    const currentable = await Table.findById(invoice.tableid)
+
+    currentable.lastinvoice = req.body.invoiceId
+
+    await currentable.save();
+
+
     await invoice.save();
-    console.log(req.body.tableId)
+    // console.log(req.body.tableId)
     const updatedInvoice = await Table.findByIdAndUpdate(
       req.body.tableId,
       { $pull: { invoice: req.body.invoiceId } },
       { new: true }
     );
-    console.log(updatedInvoice)
+    // console.log(updatedInvoice)
 
     if (!updatedInvoice) {
       return res.status(404).json({ message: 'Invoice or food item not found' });
@@ -234,7 +262,7 @@ router.post('/cancele', async (req, res) => {
 router.post('/finish', async (req, res) => {
   try {
     let invoice = await Invoice.findById(req.body.invoiceId);
-    console.log(req.body);
+    // console.log(req.body);
 
     invoice.active = false;
     invoice.type = "finish";
@@ -242,8 +270,15 @@ router.post('/finish', async (req, res) => {
     invoice.fullcost = req.body.totalcost;
     invoice.fulldiscont = req.body.totaldicont;
     invoice.finalcost = req.body.finalcost;
+    invoice.tableid = req.body.tableId;
+
+
+    const currentable = await Table.findById(invoice.tableid)
+
+    currentable.lastinvoice = req.body.invoiceId
 
     await invoice.save();
+    await currentable.save();
     const updatedInvoice = await Table.findByIdAndUpdate(
       req.body.tableId,
       { $pull: { invoice: req.body.invoiceId } },
@@ -262,6 +297,19 @@ router.post('/finish', async (req, res) => {
     return res.json({ message: 'No invoice found in the table', err });
   }
 })
+
+router.post('/printinvoice', async (req, res) => {
+  try {
+
+    htmlpage = req.body.htmlbody;
+
+
+  } catch (err) {
+    console.error(err);
+    return res.json({ message: 'No invoice found in the table', err });
+  }
+})
+
 
 router.get('/:tableId/foodmenu', async (req, res) => {
   try {
@@ -286,13 +334,12 @@ router.get('/:tableId/foodmenu', async (req, res) => {
 
     const invoice = table.invoice[0];
 
-    res.json({ message: 'Food items retrieved successfully',newquantity:invoice.food.quantity, food: invoice.food,invoiceid: invoice.id, setting });
+    res.json({ message: 'Food items retrieved successfully', newquantity: invoice.food.quantity, food: invoice.food, invoiceid: invoice.id, setting });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
-
 
 router.get('/:invoiceId/checout', async (req, res) => {
   try {
@@ -308,7 +355,6 @@ router.get('/:invoiceId/checout', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-
 
 
 

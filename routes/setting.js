@@ -4,6 +4,8 @@ const Food = require("../models/food");
 const Table = require("../models/table");
 const Invoice = require("../models/invoice");
 const Setting = require("../models/pagesetting");
+const Delevery = require("../models/delevery");
+
 // const Sitting = require("../models/pagesitting");
 const multer = require('multer');
 const fs = require('fs');
@@ -26,8 +28,6 @@ const upload = multer({ storage: storage });
       setting.adress = req.body.adress
       setting.phonnumber = req.body.phonnumber
       if (req.file) {
-        
-
         // Delete the previous image if it exists
         console.log(req.file)
         // Add the new image to the project
@@ -45,6 +45,7 @@ const upload = multer({ storage: storage });
 router.get('/', async (req, res) => {
   const table = await Table.find();
   const setting = await Setting.find();
+  const delevery = await Delevery.find();
   if (setting.length < 1) {
     const newSetting = new Setting({});
     try {
@@ -55,7 +56,7 @@ router.get('/', async (req, res) => {
       res.status(400).json({ message: err.message });
     }
   }
-  res.render('setting', { table, setting });
+  res.render('setting', { table, setting,delevery });
 
 })
 
