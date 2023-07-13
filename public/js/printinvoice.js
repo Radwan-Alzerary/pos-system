@@ -36,7 +36,7 @@ function printinvoice(invoiceId) {
             
                 <style>
                     * {
-                        font-size: 12px;
+                        font-size: 1.2rem;
                         font-family: 'Times New Roman';
                     }
                 
@@ -83,7 +83,7 @@ function printinvoice(invoiceId) {
                     }
             
                     .centered {
-                        font-size: 3rem;
+                        font-size: 3.2rem;
                         text-align: center;
                         align-content: center;
                     }
