@@ -338,7 +338,7 @@ router.post('/printinvoice', async (req, res) => {
       selector: 'main',
     })
       .then(() => {
-        console.log(done);
+        console.log("done");
         printImageAsync('./image.png')
       })
     console.log(htmlpage)
