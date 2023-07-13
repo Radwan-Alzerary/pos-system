@@ -36,8 +36,8 @@ function printinvoice(invoiceId) {
             
                 <style>
                     * {
-                        font-size: 1.2rem;
-                        font-family: 'Times New Roman';
+                        font-size: 1.5rem;
+                         font-family: 'Times New Roman';
                     }
                 
                     .footerpos {
@@ -64,7 +64,7 @@ function printinvoice(invoiceId) {
                 
                     td.quantity,
                     th.quantity {
-                        width: 40px;
+                        width: 15%;
                         max-width: 40px;
                         word-break: break-all;
                     }
@@ -89,12 +89,12 @@ function printinvoice(invoiceId) {
                     }
                     main{
                         padding: 6px;
-                        width: 480px;
+                        width: 520px;
                     }
 
                     .ticket {
                         padding: 6px;
-                        width: 480px;
+                        width: 520px;
                         max-width: 480px;
                     }
                 
@@ -194,7 +194,7 @@ function printinvoice(invoiceId) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({htmbody: htmltoprint})
+                body: JSON.stringify({ htmbody: htmltoprint })
             })
                 .then(response => response.json())
                 .then(data => {
