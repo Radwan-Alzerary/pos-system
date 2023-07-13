@@ -51,13 +51,14 @@ function printinvoice(invoiceId) {
                     th,
                     tr,
                     table {
+                        width: 100%;
                         border-top: 1px solid black;
                         border-collapse: collapse;
                     }
                 
                     td.description,
                     th.description {
-                        width: 75px;
+                        width: 40%;
                         max-width: 75px;
                     }
                 
@@ -70,35 +71,31 @@ function printinvoice(invoiceId) {
                 
                     td.price,
                     th.price {
-                        width: 40px;
+                        width: 30%;
                         max-width: 40px;
                         word-break: break-all;
                     }
-                
+
                     td.finalprice,
                     th.finalprice {
                 
                         font-weight: bold;
                     }
-                
-                
+            
                     .centered {
-                        font-size: 2rem;
+                        font-size: 3rem;
                         text-align: center;
                         align-content: center;
                     }
                     main{
                         padding: 6px;
-                        width: 440px;
-                    table{
-                        width: 100%;
+                        width: 480px;
+                    }
 
-                    }
-                    }
                     .ticket {
                         padding: 6px;
-                        width: 440px;
-                        max-width: 440px;
+                        width: 480px;
+                        max-width: 480px;
                     }
                 
                     .logoimg {
