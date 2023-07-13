@@ -90,7 +90,10 @@ function printinvoice(invoiceId) {
                     main{
                         padding: 6px;
                         width: 440px;
+                    table{
+                        width: 100%;
 
+                    }
                     }
                     .ticket {
                         padding: 6px;
