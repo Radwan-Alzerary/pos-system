@@ -10,6 +10,7 @@
                             return; // Stop the forEach loop
                             }
                             %>
+                            <%if(tables.active){%>
                             <a href="/cashier/menu?tableid=<%=tables.id%>" class="group  text-cente ">
                                 <div
                                     class="hover:bg-slate-200<%if(tables.invoice[0]){%> bg-green-200 <%}else{%> bg-white<%}%> aspect-h-1  aspect-w-1 w-full  overflow-hidden rounded-lg  xl:aspect-h-5 xl:aspect-w-5">
@@ -20,13 +21,13 @@
                                     </div>
                                 </div>
                             </a>
+                            <%}%>
                             <%})}else{%>
                                 <div
                                     class="h-8 cursor-pointer flex items-center p-3 hover:bg-orange-300 bg-orange-100   rounded-xl ">
                                     لا يوجد طاولات
                                 </div>
                                 <%}%>
-                                    <!-- More products... -->
             </div>
         </div>
     </div>

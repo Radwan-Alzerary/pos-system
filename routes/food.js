@@ -49,6 +49,7 @@ router.post('/addcategory', async (req, res) => {
   }
 })
 
+
 router.post('/getfooddata', async (req, res) => {
   try {
     const fooddata = await Food.findById(req.body.id);
@@ -66,7 +67,8 @@ router.post('/editfood', upload.single('image'), async (req, res) => {
     let food = await Food.findById(req.body.foodid);
     console.log(req.body);
     food.name = req.body.name
-    food.price = req.body.price
+    food.price = parseInt(req.body.price.replace(/[^0-9]/g, ''))
+    food.cost = parseInt(req.body.cost.replace(/[^0-9]/g, ''))
     food.quantety = req.body.quantety
     food.unlimit = req.body.unlimitecheck
     if (req.file) {
@@ -137,6 +139,7 @@ router.post('/addfood', upload.single('image'), async (req, res) => {
   try {
     const Categoryid = req.body.foodcategoryid;
     const pricenum = parseInt(req.body.price.replace(/[^0-9]/g, ''));
+    const costnum = parseInt(req.body.cost.replace(/[^0-9]/g, ''));
     const { name, unlimitecheck, quantety } = req.body;
     const imagePath = req.file ? '/img/foodimg/' + req.file.filename : null;
     console.log(imagePath)
@@ -144,6 +147,7 @@ router.post('/addfood', upload.single('image'), async (req, res) => {
     const food = new Food({
       name,
       price: pricenum,
+      cost:costnum,
       unlimit: unlimitecheck,
       image: { url: imagePath },
       quantety,

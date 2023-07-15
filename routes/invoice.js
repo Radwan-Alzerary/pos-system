@@ -9,9 +9,11 @@ const nodeHtmlToImage = require('node-html-to-image')
 const { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } = require('node-thermal-printer');
 
 async function printImageAsync(imagePath) {
+  const setting = await Setting.findOne()
+
   const printer = new ThermalPrinter({
     type: PrinterTypes.EPSON,
-    interface: 'tcp://192.168.123.100:9100',
+    interface: `tcp://${setting.printerip}:9100`,
     characterSet: CharacterSet.SLOVENIA,
     removeSpecialCharacters: false,
     lineCharacter: "=",
@@ -22,8 +24,11 @@ async function printImageAsync(imagePath) {
   });
 
   try {
+    printer.alignCenter()
+    await printer.printImage(`./public${setting.shoplogo}`);  // Print PNG image
     await printer.printImage(imagePath);  // Print PNG image
     await printer.cut();
+    await printer.execute();
     await printer.execute();
     console.log('Image printed successfully.');
   } catch (error) {
@@ -33,8 +38,63 @@ async function printImageAsync(imagePath) {
 
 router.get('/list', async (req, res) => {
   try {
-    const invoice = await Invoice.find()
-    res.render('invoice-list', { invoice });
+
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const lastDay = new Date();
+    lastDay.setDate(lastDay.getDate() - 1);
+
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+    const lastYear = new Date();
+    lastYear.setFullYear(lastYear.getFullYear() - 1);
+
+    const day = 12; // Specify the desired day
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    startOfDay.setDate(day);
+
+    const endOfDay = new Date(startOfDay);
+    endOfDay.setDate(day + 1);
+
+    const invoicesForDay = await Invoice.find({
+      createdAt: { $gte: startOfDay, $lt: endOfDay }
+    }).sort({ createdAt: -1 });
+
+    let dateview = req.query.dateview || 1;
+
+    let pagenum = req.query.page || 1;
+    let state = req.query.state || '';
+    let query = {};
+
+    if (state) {
+      query.type = state;
+    }
+
+
+    let invoice = ""
+    if (dateview == "last30day") {
+      invoice = await Invoice.find({ createdAt: { $gte: thirtyDaysAgo } }, query).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
+    } else if (dateview == "lastday") {
+      invoice = await Invoice.find({ "$and": [query,{createdAt : { $gte: lastDay }}]}).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
+    } else if (dateview == "lastmonth") {
+      invoice = await Invoice.find({"$and": [query,{createdAt : { $gte: lastYear }}] })
+      .select('-__v') // Exclude the '__v' field if it exists
+      .sort({ createdAt: -1 })
+      .skip((pagenum - 1) * 10)
+      .limit(10);
+        } else if (dateview == "lastyear") {
+      invoice = await Invoice.find({ createdAt: { $gte: lastYear }, query }).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
+    } else {
+      invoice = await Invoice.find(query).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
+    }
+    console.log(invoice)
+
+    const invoiceCount = await Invoice.countDocuments();
+    res.render('invoice-list', { invoice, invoiceCount });
 
   } catch (err) {
     console.error(err);
@@ -69,7 +129,7 @@ router.post('/food', async (req, res) => {
       // If the table does not have an invoice, create a new one
       invoice = new Invoice({
         number: invoiceNumber,
-        type: 'pending', // Replace with the appropriate type
+        type: 'قيد المعالجة', // Replace with the appropriate type
         active: true,
       });
       await invoice.save();
@@ -201,7 +261,6 @@ router.post('/price', async (req, res) => {
     let totaldiscount = 0
     for (const food of invoice.food) {
       // console.log(food)
-
       const quantity = food.quantity;
       const discount = food.discount;
       const price = food.id.price;
@@ -247,7 +306,7 @@ router.post('/cancele', async (req, res) => {
     let invoice = await Invoice.findById(req.body.invoiceId);
     // console.log(req.body);
     invoice.active = false;
-    invoice.type = "cancled";
+    invoice.type = "ملغى";
     invoice.fullcost = req.body.totalcost;
     invoice.fulldiscont = req.body.totaldicont;
     invoice.finalcost = req.body.finalcost;
@@ -289,7 +348,7 @@ router.post('/finish', async (req, res) => {
     // console.log(req.body);
 
     invoice.active = false;
-    invoice.type = "finish";
+    invoice.type = "مكتمل";
     invoice.progressdata = Date.now();
     invoice.fullcost = req.body.totalcost;
     invoice.fulldiscont = req.body.totaldicont;
@@ -324,20 +383,18 @@ router.post('/finish', async (req, res) => {
 
 router.post('/printinvoice', async (req, res) => {
   try {
-
     htmlpage = req.body.htmbody;
     nodeHtmlToImage({
       output: './image.png',
       html: htmlpage,
       type: 'png',
       selector: 'main',
-      
     })
       .then(() => {
         console.log("done");
         printImageAsync('./image.png')
       })
-    console.log(htmlpage)
+    // console.log(htmlpage)
 
 
     res.status('200').json({ msg: "done" })
@@ -352,7 +409,6 @@ router.get('/:tableId/foodmenu', async (req, res) => {
   try {
     const { tableId } = req.params;
     const setting = await Setting.findOne().sort({ number: -1 });
-
     const table = await Table.findById(tableId).populate({
       path: 'invoice',
       populate: {

@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
 
 router.get('/menu/', async (req, res) => {
     let tableid = req.query.tableid || '_id';
-    const table = await Table.findById(tableid).populate("invoice");
-    console.log(table)
+    // const table = await Table.findById(tableid).populate("invoice");
+    const table = await Table.find();
     const category = await Category.find().populate("foods");
     console.log(category)
-    res.render('cashier-food', { category });
+    res.render('cashier-food', { category,table ,tableid});
 })
 
 

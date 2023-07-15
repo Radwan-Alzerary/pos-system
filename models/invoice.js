@@ -9,7 +9,7 @@ const InvoiceSchema = new mongoose.Schema({
     fullcost: { type: Number },
     fulldiscont: { type: Number },
     finalcost: { type: Number },
-    deleveryadress:{type:String},
+    deleveryadress: { type: String },
     tableid: { type: mongoose.Schema.Types.ObjectId, ref: 'Table' },
     food: [{
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Food' },
@@ -17,7 +17,7 @@ const InvoiceSchema = new mongoose.Schema({
         discount: { type: Number },
         discountType: { type: String }
     }],
-    discount:{type:Number},
+    discount: { type: Number },
     progressdata: { type: Date }
 
 }, {

@@ -3,11 +3,11 @@ const DeliverySchema = new mongoose.Schema({
     deliveryname: { type: String, require },
     deliverynumber: { type: String, require },
     invoice: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Invoice',
+        id: { type: mongoose.Schema.Types.ObjectId, ref: 'Invoice' },
         customername : {type:String},
         location: { type: String },
         phoneNumber: { type: String },
-        prgress : {type:String},
+        progress : {type:String},
         finishdate : {type:String}
     }],
 }, {

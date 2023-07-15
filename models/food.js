@@ -24,6 +24,9 @@ const FoodSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     }, deleted: {
         type: Boolean, default: false
+    },
+    cost: {
+        type: Number, default: 0
     }
 }, {
     timestamps: true

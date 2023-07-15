@@ -1,5 +1,5 @@
 
-function printinvoice(invoiceId) {
+function printinvoice(invoiceId, loction, phonenumber) {
     fetch(`/invoice/${invoiceId}/checout`)
         .then(response => response.json())
         .then(data => {
@@ -25,6 +25,18 @@ function printinvoice(invoiceId) {
                 <td class="price">${item[3]}</td>
             </tr>
                 `
+            }
+            var deleveryinfo = "";
+            if (loction && phonenumber) {
+                deleveryinfo = `  <div class="footerpos">
+                <a>عنوان الطلبية : ${loction}</a>
+            </div>
+            <div class="footerpos">
+                <a>رقم الطلبية : ${phonenumber}</a>
+            </div>
+            `
+            } else {
+                deleveryinfo = ""
             }
             console.log(items)
 
@@ -129,9 +141,6 @@ function printinvoice(invoiceId) {
 
             <body>
                 <main class="ticket">
-                    <div class="logoimg">
-                        <img src="${data.setting.shoplogo}" alt="Logo">
-                    </div>
                     <p class="centered">الفاتورة
                     </p>
                     <div class="footerpos">
@@ -144,14 +153,13 @@ function printinvoice(invoiceId) {
                         <thead>
                             <tr>
                                 <th class="description">الاسم</th>
-            
                                 <th class="quantity">#</th>
-            
                                 <th class="price">السعر</th>
                                 <th class="price">الكلي</th>
                             </tr>
                         </thead>
                         <tbody>
+                        <hr>
                             ${items}
                             <tr>
                                 <td class="quantity"></td>
@@ -177,7 +185,7 @@ function printinvoice(invoiceId) {
             
                         </tbody>
                     </table>
-            
+                    ${deleveryinfo}
                     <p class="centered">شكرا لتعاملكم معنا
                     </p>
             

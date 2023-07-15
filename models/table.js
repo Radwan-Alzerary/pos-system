@@ -6,6 +6,7 @@ const TableSchema = new mongoose.Schema({
     },
     active: {
         type: Boolean,
+        default:true
     },
     booked: {
         type: Boolean

@@ -2,16 +2,31 @@ const mongoose = require('mongoose');
 const SettingSchema = new mongoose.Schema({
     shopname: {
         type: String,
+        default: ""
     },
     shoplogo: {
-        type: String
+        type: String,
+        default: ""
+
     },
     printerip: {
-        type: String
+        type: String,
+        default: ""
+
     },
-    adress: { type: String },
-    phonnumber: { type: Number },
-    deleverytable : { type: mongoose.Schema.Types.ObjectId, ref: 'Table' }
+    adress: {
+        type: String,
+        default: ""
+    },
+
+    phonnumber: {
+        type: Number,
+        default: 0
+    },
+    dollarprice: { type: Number,
+        default:"1"
+    },
+    deleverytable: { type: mongoose.Schema.Types.ObjectId, ref: 'Table' }
 }, {
     timestamps: true
 });

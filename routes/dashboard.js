@@ -22,6 +22,7 @@ const upload = multer({ storage: storage });
 router.get('/', async (req, res) => {
   const category = await Category.find().populate("foods");
   console.log(category)
+  
   res.render('dashboard', { category });
 })
 
