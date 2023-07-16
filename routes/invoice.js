@@ -7,6 +7,7 @@ const Invoice = require("../models/invoice");
 const Setting = require("../models/pagesetting");
 const nodeHtmlToImage = require('node-html-to-image')
 const { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } = require('node-thermal-printer');
+const puppeteer = require('puppeteer');
 
 async function printImageAsync(imagePath) {
   const setting = await Setting.findOne()
@@ -383,26 +384,34 @@ router.post('/finish', async (req, res) => {
 
 router.post('/printinvoice', async (req, res) => {
   try {
-    htmlpage = req.body.htmbody;
-    nodeHtmlToImage({
-      output: './image.png',
-      html: htmlpage,
-      type: 'png',
-      selector: 'main',
-    })
-      .then(() => {
-        console.log("done");
-        printImageAsync('./image.png')
-      })
-    // console.log(htmlpage)
+    const htmlContent = req.body.htmbody;
 
+    const generateImage = async () => {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.setContent(htmlContent);
 
-    res.status('200').json({ msg: "done" })
+      await page.waitForSelector('main'); // Wait for the <main> element to be rendered
+      const mainElement = await page.$('main'); // Select the <main> element
+
+      await mainElement.screenshot({
+        path: './image.png',
+        fullPage: false, // Capture only the <main> element
+        javascriptEnabled: false,
+        headless: true
+      });
+      await browser.close();
+      console.log("Image generation done");
+    };
+
+    await generateImage(); // Generate the image asynchronously
+
+    res.status(200).json({ msg: "done" });
   } catch (err) {
     console.error(err);
     return res.json({ message: 'No invoice found in the table', err });
   }
-})
+});
 
 
 router.get('/:tableId/foodmenu', async (req, res) => {
