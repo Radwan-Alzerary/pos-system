@@ -104,13 +104,13 @@ function printinvoice(invoiceId, loction, phonenumber) {
                     }
                     main{
                         padding: 6px;
-                        width: 520px;
+                        width: 700px;
                     }
 
                     .ticket {
                         padding: 6px;
-                        width: 520px;
-                        max-width: 480px;
+                        width: 700px;
+                        max-width: 7000px;
                     }
                 
                     .logoimg {
@@ -214,14 +214,14 @@ function printinvoice(invoiceId, loction, phonenumber) {
 <head>
     <style>
         * {
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             margin: 0px;
             font-family: 'Arial';
         }
 
         main {
             padding: 6px;
-            width: 300px;
+            width: 560px;
         }
 
         .dashed-line {
@@ -269,7 +269,7 @@ function printinvoice(invoiceId, loction, phonenumber) {
                 <div>
                 </div>
                 <div style="text-align: right;">
-                    اسم العميل : احمد ياسر محمد
+                    اسم العميل : 
                 </div>
 
             </div>
