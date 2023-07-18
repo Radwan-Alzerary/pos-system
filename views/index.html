@@ -1,153 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 
 <head>
-
     <style>
         * {
-            font-size: 12px;
-            font-family: 'Times New Roman';
+            font-size: 1.1rem;
+            margin: 0px;
+            font-family: 'Arial';
         }
-    
-        .footerpos {
-            display: flex;
-            text-align: right;
-            align-items: right;
-            justify-content: flex-end;
+
+        main {
+            padding: 6px;
+            width: 300px;
         }
-    
-        td,
-        th,
-        tr,
-        table {
-            border-top: 1px solid black;
-            border-collapse: collapse;
+
+        .dashed-line {
+            border: none;
+            height: 2px;
+            /* Set the desired height for the dashed line */
+            background-image: repeating-linear-gradient(to right, black, black 8px, transparent 8px, transparent 16px);
         }
-    
-        td.description,
-        th.description {
-            width: 75px;
-            max-width: 75px;
-        }
-    
-        td.quantity,
-        th.quantity {
-            width: 40px;
-            max-width: 40px;
-            word-break: break-all;
-        }
-    
-        td.price,
-        th.price {
-            width: 40px;
-            max-width: 40px;
-            word-break: break-all;
-        }
-    
-        td.finalprice,
-        th.finalprice {
-    
-            font-weight: bold;
-        }
-    
-    
-        .centered {
-            font-size: 2rem;
-            text-align: center;
-            align-content: center;
-        }
-    
-        .ticket {
-            width: 240px;
-            max-width: 240px;
-        }
-    
-        .logoimg {
-            width: 100%;
+
+        .centerdiv {
             display: flex;
             justify-content: center;
             align-items: center;
         }
-    
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        th,
         td {
             text-align: center;
         }
-    
-        img {
-            height: 100px;
-            max-width: inherit;
-            width: inherit;
-        }
-    
-    
-        @media print {
-    
-            .hidden-print,
-            .hidden-print * {
-                display: none !important;
-            }
-        }
     </style>
-    
 </head>
 
 <body>
-    <div class="ticket">
-        <div class="logoimg">
-            <img src="./logo.svg" alt="Logo">
+    <main>
+        <hr class="dashed-line">
+        <div class="centerdiv">
+            <a style="font-weight: bold; margin-top: 3px; margin-bottom: 3px;">
+                مطعم البحر الازرق
+            </a>
         </div>
-        <p class="centered">الفاتورة
-        </p>
-        <div class="footerpos">
-            <a>العنوان : موصل حي الزهور</a>
+        <hr class="dashed-line">
+        <div style="margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                </div>
+                <div style="text-align: right;">
+                    اسم العميل : احمد ياسر محمد
+                </div>
+
+            </div>
+            <div style="display: flex; justify-content: space-between;margin-top: 6px;">
+                <div style="margin-left: 27px;">
+                    ر.الطاولة: 4
+                </div>
+                <div>
+                    التاريخ : 2022/15/45
+                </div>
+
+            </div>
+            <div style="display: flex;justify-content: space-between;margin-top: 4px;margin-bottom: 4px;">
+                <div>
+                    ر.الوصل : 345
+                </div>
+                <div>
+                    الوقت : 10:56:42
+                </div>
+
+            </div>
         </div>
-        <div class="footerpos">
-            <a>رقم الهاتف : 0770</a>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th class="description">الاسم</th>
-                    <th class="quantity">#</th>
-                    <th class="price">السعر</th>
-                    <th class="price">الكلي</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="description">ARDUINO UNO R3</td>
-                    <td class="quantity">1.00</td>
-                    <td class="price">25.00IQD</td>
-                </tr>
-                <tr>
-                    <td class="quantity"></td>
-                    <td class="quantity"></td>
-                    <td class="description">المجموع</td>
-                    <td class="finalprice ">50000</td>
-                </tr>
-
-                <tr>
-                    <td class="quantity"></td>
-                    <td class="quantity"></td>
-                    <td class="description">الخصومات</td>
-                    <td class="finalprice ">50000</td>
-                </tr>
-
-                <tr>
-                    <td class="quantity"></td>
-                    <td class="quantity"></td>
-                    <td class="description">الكلي</td>
-                    <td class="finalprice ">50000</td>
-                </tr>
-
-
-            </tbody>
+        <table style="width:100%">
+            <tr>
+                <th>السعر</th>
+                <th>العدد</th>
+                <th>اسم المادة</th>
+                <th>الاجمالي</th>
+            </tr>
+            <tr>
+                <td>Jill</td>
+                <td>5</td>
+                <td>وجبة شاورما عربي</td>
+                <td>54000</td>
+            </tr>
+            <tr>
+                <td>Eve</td>
+                <td>5</td>
+                <td>دجاج كنتاكي</td>
+                <td>36000</td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>3</td>
+                <td>ريزو دجاج</td>
+                <td>34000</td>
+            </tr>
         </table>
 
-        <p class="centered">شكرا لتعاملكم معنا
-        </p>
+        <div style="display: flex;justify-content: end;margin-top: 10px;">
+            <div style="text-align: right;">
+                <div>
+                    <a style="margin-right: 20px;">اجمالي الفاتورة</a>
+                </div>
+                <div style="margin-top: 3px;">
+                    <a style="margin-right: 20px;">اجمالي الخصومات</a>
+                </div>
+                <div style="margin-top: 7px;font-weight: bold;">
+                    <a style="margin-right: 20px;">د.ع المجموع</a>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <div>
+                    <a> 40,000</a>
+                </div>
+                <div style="margin-top: 3px;">
+                    <a>10,000</a>
+                </div>
+                <div style="margin-top: 3px;font-weight: bold; border: 2px solid black;padding: 2px;">
+                    <a>100,000</a>
+                </div>
 
-    </div>
+            </div>
+
+        </div>
+        <hr class="dashed-line" style="margin-top: 20px;">
+        <div style="text-align: right;">
+            <div style="margin-top: 4px;">
+                العنوان : الموصل حي الزهور
+            </div>
+            <div style="margin-top: 4px;">
+                 الهاتف : 0770228350
+            </div>
+        </div>
+        <div class="centerdiv" style="padding-top: 10px; font-size:1.8rem">
+            شكرا لتعاملكم معنا
+        </div>
+    </main>
 </body>
 
 </html>

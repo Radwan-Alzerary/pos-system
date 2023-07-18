@@ -72,6 +72,11 @@
             <div id="invoicefood" class="bg-white relative overflow-auto h-80">
 
             </div>
+            <div class="w-full">
+                <input type="text" placeholder="اسم المستلم" name="name" id="resivename"
+                    class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+
             <div class="mt-5 w-full flex items-center justify-center h-12">
                 <div class="mb-6 w-3/4">
                     <input type="text" placeholder="خصم" name="name" oninput="discountchange(event)" id="discontinput"
@@ -102,6 +107,7 @@
                     <div class="font-medium text-sm"><a id="totalprice">0</a><span> IQD</span></div>
                     <div class="text-gray-600 text-sm"><a>مجموع السعر</a></div>
                 </div>
+                
                 <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
                 <div class="flex justify-around my-1 gap-16 items-center">
                     <div class="font-medium text-sm"><a id="totaldiscount">0</a><span> IQD</span></div>
@@ -390,6 +396,7 @@
                 const totaldicont = $("#totaldiscount").text();
                 const invoiceId = $('#invoiceidelement').text();
                 const deloveryname = $('#deloveryname').val();
+                const resivename = $('#resivename').val();
                 const deleveryid = $('#deleveryid').val();
                 const deloveryphone = $('#deloveryphone').val();
                 if (deloveryname.length > 0 & deloveryphone.length > 0) {

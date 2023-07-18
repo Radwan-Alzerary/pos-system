@@ -29,10 +29,12 @@ router.get('/menu/', async (req, res) => {
 router.post('/addelavery', async (req, res) => {
     const deliveryname = req.body.deliveryname
     const deliverynumber = req.body.deliverynumber
+    const resivename = req.body.resivename
     try {
         const delivery = new Delevery({
             deliveryname: deliveryname,
             deliverynumber: deliverynumber,
+            customername: resivename,
         });
         await delivery.save();
 
@@ -83,7 +85,7 @@ router.post('/finish', async (req, res) => {
         console.log(delevery)
         const newdeleveryinvoice = {
             id: newinvoice.id,
-            customername: "",
+            customername: req.body.resivename,
             location: req.body.deloveryname,
             phoneNumber: req.body.deloveryname,
             prgress: "قيد التوصيل",

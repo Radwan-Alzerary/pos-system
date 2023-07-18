@@ -20,7 +20,7 @@ const SettingSchema = new mongoose.Schema({
     },
 
     phonnumber: {
-        type: Number,
+        type: String,
         default: 0
     },
     dollarprice: { type: Number,

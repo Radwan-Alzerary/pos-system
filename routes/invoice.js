@@ -8,7 +8,7 @@ const Setting = require("../models/pagesetting");
 const nodeHtmlToImage = require('node-html-to-image')
 const { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } = require('node-thermal-printer');
 const puppeteer = require('puppeteer');
-
+const browserPromise = puppeteer.launch(); // Launch the browser once
 async function printImageAsync(imagePath) {
   const setting = await Setting.findOne()
 
@@ -20,7 +20,7 @@ async function printImageAsync(imagePath) {
     lineCharacter: "=",
     breakLine: BreakLine.WORD,
     options: {
-      timeout: 5000
+      timeout: 2000
     }
   });
 
@@ -387,7 +387,7 @@ router.post('/printinvoice', async (req, res) => {
     const htmlContent = req.body.htmbody;
 
     const generateImage = async () => {
-      const browser = await puppeteer.launch();
+      const browser = await browserPromise; // Reuse the same browser instance
       const page = await browser.newPage();
       await page.setContent(htmlContent);
 
@@ -400,19 +400,17 @@ router.post('/printinvoice', async (req, res) => {
         javascriptEnabled: false,
         headless: true
       });
-      await browser.close();
       console.log("Image generation done");
     };
 
     await generateImage(); // Generate the image asynchronously
-
+    await printImageAsync("./image.png")
     res.status(200).json({ msg: "done" });
   } catch (err) {
     console.error(err);
     return res.json({ message: 'No invoice found in the table', err });
   }
 });
-
 
 router.get('/:tableId/foodmenu', async (req, res) => {
   try {
@@ -451,7 +449,8 @@ router.get('/:invoiceId/checout', async (req, res) => {
       path: 'food.id',
       model: 'Food'
     });
-    res.json({ message: 'Food items retrieved successfully', food: invoice.food, invoiceid: invoice.id, setting: setting, finalcost: invoice.finalcost, fullcost: invoice.fullcost, fulldiscont: invoice.fulldiscont });
+
+    res.json({ message: 'Food items retrieved successfully',invoicedate: invoice.progressdata, food: invoice.food, invoiceid: invoice.id, setting: setting, finalcost: invoice.finalcost, fullcost: invoice.fullcost,invoicenumber : invoice.number, fulldiscont: invoice.fulldiscont });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
