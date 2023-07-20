@@ -1376,6 +1376,10 @@ input:checked + .toggle-bg {
   height: 100vh;
 }
 
+.h-1 {
+  height: 0.25rem;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -1957,6 +1961,16 @@ input:checked + .toggle-bg {
 .bg-zinc-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(244 244 245 / var(--tw-bg-opacity));
+}
+
+.bg-green-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(222 247 236 / var(--tw-bg-opacity));
+}
+
+.bg-green-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(49 196 141 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-50 {

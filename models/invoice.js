@@ -10,6 +10,7 @@ const InvoiceSchema = new mongoose.Schema({
     fulldiscont: { type: Number },
     finalcost: { type: Number },
     deleveryadress: { type: String },
+    resivename : {type: String},
     tableid: { type: mongoose.Schema.Types.ObjectId, ref: 'Table' },
     food: [{
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Food' },

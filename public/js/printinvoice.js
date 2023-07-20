@@ -1,5 +1,5 @@
 
-function printinvoice(invoiceId, loction, phonenumber) {
+function printinvoice(invoiceId,resivename, loction, phonenumber) {
     fetch(`/invoice/${invoiceId}/checout`)
         .then(response => response.json())
         .then(data => {
@@ -37,6 +37,14 @@ function printinvoice(invoiceId, loction, phonenumber) {
             `
             } else {
                 deleveryinfo = ""
+            }
+            var resivername = "";
+            if(resivename){
+                resivername= `
+                <div style="text-align: right;">
+                اسم العميل : ${resivename}
+            </div>
+`
             }
             console.log(items)
 
@@ -268,14 +276,12 @@ function printinvoice(invoiceId, loction, phonenumber) {
             <div style="display: flex; justify-content: space-between;">
                 <div>
                 </div>
-                <div style="text-align: right;">
-                    اسم العميل : 
-                </div>
+                ${resivername}
 
             </div>
             <div style="display: flex; justify-content: space-between;margin-top: 6px;">
                 <div style="margin-left: 27px;">
-                    ر.الطاولة: 4
+                    ر.الطاولة: ${data.tablenumber}
                 </div>
                 <div>
                 
@@ -342,7 +348,7 @@ function printinvoice(invoiceId, loction, phonenumber) {
     </div>
 
         <div class="centerdiv" style="padding-top: 10px; font-size:1.8rem">
-            شكرا لتعاملكم معنا
+            ${data.setting.invoicefooter}
         </div>
 
         ${deleveryinfo}

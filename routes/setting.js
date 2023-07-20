@@ -27,6 +27,7 @@ const upload = multer({ storage: storage });
       setting.printerip = req.body.printerip
       setting.adress = req.body.adress
       setting.phonnumber = req.body.phonnumber
+      setting.invoicefooter = req.body.invoicefooter
       if (req.file) {
         // Delete the previous image if it exists
         console.log(req.file)

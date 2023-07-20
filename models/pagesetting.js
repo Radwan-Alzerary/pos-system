@@ -26,7 +26,8 @@ const SettingSchema = new mongoose.Schema({
     dollarprice: { type: Number,
         default:"1"
     },
-    deleverytable: { type: mongoose.Schema.Types.ObjectId, ref: 'Table' }
+    deleverytable: { type: mongoose.Schema.Types.ObjectId, ref: 'Table' },
+    invoicefooter : {type:String}
 }, {
     timestamps: true
 });

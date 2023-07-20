@@ -353,6 +353,7 @@ router.post('/finish', async (req, res) => {
     invoice.progressdata = Date.now();
     invoice.fullcost = req.body.totalcost;
     invoice.fulldiscont = req.body.totaldicont;
+    invoice.resivename = req.body.resivename;
     invoice.finalcost = req.body.finalcost;
     invoice.tableid = req.body.tableId;
 
@@ -448,9 +449,9 @@ router.get('/:invoiceId/checout', async (req, res) => {
     const invoice = await Invoice.findById(invoiceId).populate({
       path: 'food.id',
       model: 'Food'
-    });
-
-    res.json({ message: 'Food items retrieved successfully',invoicedate: invoice.progressdata, food: invoice.food, invoiceid: invoice.id, setting: setting, finalcost: invoice.finalcost, fullcost: invoice.fullcost,invoicenumber : invoice.number, fulldiscont: invoice.fulldiscont });
+    }).populate({ path: 'tableid', model: 'Table' });;
+    console.log(invoice);
+    res.json({ message: 'Food items retrieved successfully',tablenumber:invoice.tableid.number,invoicedate: invoice.progressdata, food: invoice.food, invoiceid: invoice.id, setting: setting, finalcost: invoice.finalcost, fullcost: invoice.fullcost,invoicenumber : invoice.number, fulldiscont: invoice.fulldiscont });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });

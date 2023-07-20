@@ -67,7 +67,11 @@
                         </svg>
                     </div>
                 </div>
-                <div class="w-24 h-10 rounded-lg bg-gray-100"></div>
+                <div id="insidelevery" class="w-24 h-10 rounded-lg bg-green-100">
+                    <div class="flex justify-center items-center  h-full">
+                        داخل صالة
+                    </div>
+                </div>
             </div>
             <div id="invoicefood" class="bg-white relative overflow-auto h-80">
 
@@ -107,7 +111,7 @@
                     <div class="font-medium text-sm"><a id="totalprice">0</a><span> IQD</span></div>
                     <div class="text-gray-600 text-sm"><a>مجموع السعر</a></div>
                 </div>
-                
+
                 <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
                 <div class="flex justify-around my-1 gap-16 items-center">
                     <div class="font-medium text-sm"><a id="totaldiscount">0</a><span> IQD</span></div>
@@ -246,7 +250,6 @@
                             const foodTotalPrice = food.id.price * food.quantity;
                             totalPrice += foodTotalPrice;
                             fulldiscount += food.discount;
-
                             newitem(food.id, invoiceid, food.quantity)
                             getprices($("#invoiceidelement").text())
                         });
@@ -399,13 +402,13 @@
                 const resivename = $('#resivename').val();
                 const deleveryid = $('#deleveryid').val();
                 const deloveryphone = $('#deloveryphone').val();
-                if (deloveryname.length > 0 & deloveryphone.length > 0) {
+                if ((deloveryname.length > 0 & deloveryphone.length > 0) || indordelevery) {
                     fetch("/delevery/finish/", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ tableId, invoiceId, finalcost, totalcost, totaldicont, deloveryname, deloveryphone,deleveryid })
+                        body: JSON.stringify({ tableId,resivename, invoiceId, finalcost, totalcost, totaldicont, deloveryname, deloveryphone, deleveryid })
                     })
                         .then(response => response.json())
                         .then(data => {
@@ -415,7 +418,7 @@
                             $("#totaldiscount").text(0)
                             $("#invoiceidelement").text(" ");
                             refrash()
-                            printinvoice(invoiceId,deloveryname, deloveryphone)
+                            printinvoice(invoiceId,resivename, deloveryname, deloveryphone)
 
                         })
                         .catch(error => {
@@ -640,11 +643,12 @@
             //         });
 
             // }
-      
-      </script>
+
+        </script>
 
 
         <script>
+            let indordelevery = false;
             $(document).on('click', '[id^=increaseQuantity]', function () {
                 var id = this.id;
                 var foodId = id.replace('increaseQuantity', '');
@@ -856,6 +860,26 @@
                 $('#editableform').addClass('hidden');
             })
 
+            $("#insidelevery").on('click', (event) => {
+                if ($('#insidelevery').hasClass('bg-green-100')) {
+                    indordelevery=true;
+                    $("#deloveryphone").attr("readonly", "readonly");
+                    $("#deloveryname").attr("readonly", "readonly");
+                    // $("#resivename").attr("readonly", "readonly");
+                    $("#deloveryphone").val("")
+                    $("#deloveryname").val("")
+                    $(`#insidelevery`).removeClass('bg-green-100');
+                    $('#insidelevery').addClass('bg-green-400');
+                } else {
+                    indordelevery=false;
+
+                    $("#deloveryphone").removeAttr("readonly");
+                    $("#deloveryname").removeAttr("readonly");
+                    // $("#resivename").removeAttr("readonly");
+                    $(`#insidelevery`).removeClass('bg-green-400');
+                    $('#insidelevery').addClass('bg-green-100');
+                }
+            })
         </script>
 
         <script src="/js/casher.js"></script>
