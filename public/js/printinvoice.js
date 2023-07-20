@@ -207,9 +207,21 @@ function printinvoice(invoiceId,resivename, loction, phonenumber) {
             `
 
 
+let tablenum ="";
 
-
-
+if(data.tablenumber < 100){
+    tablenum=`
+    <div style="margin-left: 27px;">
+    ر.الطاولة: ${data.tablenumber}
+    </div>
+    `
+}else{
+    tablenum=`
+    <div style="margin-left: 27px;">
+    دلفري
+    </div>
+    `
+}
 
 
 
@@ -280,9 +292,7 @@ function printinvoice(invoiceId,resivename, loction, phonenumber) {
 
             </div>
             <div style="display: flex; justify-content: space-between;margin-top: 6px;">
-                <div style="margin-left: 27px;">
-                    ر.الطاولة: ${data.tablenumber}
-                </div>
+            ${tablenum}
                 <div>
                 
                     التاريخ : ${dateyear}
