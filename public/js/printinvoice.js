@@ -313,7 +313,7 @@ if(data.tablenumber < 100){
             <tr>
                 <th>السعر</th>
                 <th>العدد</th>
-                <th>اسم المادة</th>
+                <th>الوجبة</th>
                 <th>الاجمالي</th>
             </tr>
             ${items}

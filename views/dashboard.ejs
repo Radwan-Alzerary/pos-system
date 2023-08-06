@@ -478,7 +478,7 @@
             const DailySellData = [];
 
 
-            for (let i = dailyData.length - 1; i > dailyData.length - 8 && i < dailyData.length; i--) {
+            for (let i = dailyData.length - 1; i > 0 && i < dailyData.length; i--) {
                 const item = dailyData[i];
                 dailyCostData.push(item.foodCost);
                 DailySellData.push(item.sellprice);
