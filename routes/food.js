@@ -49,7 +49,6 @@ router.post('/addcategory', async (req, res) => {
   }
 })
 
-
 router.post('/getfooddata', async (req, res) => {
   try {
     const fooddata = await Food.findById(req.body.id);

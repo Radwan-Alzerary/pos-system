@@ -80,14 +80,14 @@ router.get('/list', async (req, res) => {
     if (dateview == "last30day") {
       invoice = await Invoice.find({ createdAt: { $gte: thirtyDaysAgo } }, query).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
     } else if (dateview == "lastday") {
-      invoice = await Invoice.find({ "$and": [query,{createdAt : { $gte: lastDay }}]}).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
+      invoice = await Invoice.find({ "$and": [query, { createdAt: { $gte: lastDay } }] }).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
     } else if (dateview == "lastmonth") {
-      invoice = await Invoice.find({"$and": [query,{createdAt : { $gte: lastYear }}] })
-      .select('-__v') // Exclude the '__v' field if it exists
-      .sort({ createdAt: -1 })
-      .skip((pagenum - 1) * 10)
-      .limit(10);
-        } else if (dateview == "lastyear") {
+      invoice = await Invoice.find({ "$and": [query, { createdAt: { $gte: lastYear } }] })
+        .select('-__v') // Exclude the '__v' field if it exists
+        .sort({ createdAt: -1 })
+        .skip((pagenum - 1) * 10)
+        .limit(10);
+    } else if (dateview == "lastyear") {
       invoice = await Invoice.find({ createdAt: { $gte: lastYear }, query }).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
     } else {
       invoice = await Invoice.find(query).sort({ createdAt: -1 }).skip((pagenum - 1) * 10).limit(10);
@@ -259,13 +259,16 @@ router.post('/price', async (req, res) => {
     })
       ;
     let total = 0;
+    let totalcost = 0;
     let totaldiscount = 0
     for (const food of invoice.food) {
       // console.log(food)
       const quantity = food.quantity;
       const discount = food.discount;
       const price = food.id.price;
+      const cost = food.id.cost;
       total += price * quantity;
+      totalcost += cost * quantity;
       totaldiscount += discount * quantity;
     }
     if (invoice.discount >= 0) {
@@ -276,7 +279,7 @@ router.post('/price', async (req, res) => {
     if (finalprice < 0) {
       finalprice = 0;
     }
-    res.json({ total, totaldiscount, finalprice });
+    res.json({ total, totalcost, totaldiscount, finalprice });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -355,6 +358,7 @@ router.post('/finish', async (req, res) => {
     invoice.fulldiscont = req.body.totaldicont;
     invoice.resivename = req.body.resivename;
     invoice.finalcost = req.body.finalcost;
+    invoice.foodcost = req.body.foodcost;
     invoice.tableid = req.body.tableId;
 
 
@@ -451,7 +455,7 @@ router.get('/:invoiceId/checout', async (req, res) => {
       model: 'Food'
     }).populate({ path: 'tableid', model: 'Table' });;
     console.log(invoice);
-    res.json({ message: 'Food items retrieved successfully',tablenumber:invoice.tableid.number,invoicedate: invoice.progressdata, food: invoice.food, invoiceid: invoice.id, setting: setting, finalcost: invoice.finalcost, fullcost: invoice.fullcost,invoicenumber : invoice.number, fulldiscont: invoice.fulldiscont });
+    res.json({ message: 'Food items retrieved successfully', tablenumber: invoice.tableid.number, invoicedate: invoice.progressdata, food: invoice.food, invoiceid: invoice.id, setting: setting, finalcost: invoice.finalcost, fullcost: invoice.fullcost, invoicenumber: invoice.number, fulldiscont: invoice.fulldiscont });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
@@ -540,6 +544,248 @@ router.patch('/:invoiceId/editdiscount/:foodId', async (req, res) => {
 router.get('/', async (req, res) => {
   res.render('setting');
 })
+
+
+router.post('/invoiceaovetall', async (req, res) => {
+  const fromDate = new Date('2021-08-04'); // Replace with your desired from date
+  const toDate = new Date('2027-08-09');   // Replace with your desired to date
+
+  try {
+    const yearlyResult = await Invoice.aggregate([
+      {
+        $match: {
+          type: "مكتمل",
+          progressdata: { $gte: fromDate, $lte: toDate }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" }
+          },
+          invoices: { $addToSet: "$_id" },
+          foodCount: { $sum: 1 },
+          foodcost: { $sum: "$foodcost" },
+          sellprice: { $sum: '$finalcost' },
+
+        }
+      },
+      {
+        $group: {
+          _id: { year: "$_id.year", month: "$_id.month" },
+          yearnum: { $first: "$_id.year" },
+          monthnum: { $first: "$_id.month" },
+          day: {
+            $push: {
+              daynum: "$_id.day",
+              totalCost: "$totalCost",
+              foodCount: "$foodCount",
+              foodcost: { $sum: "$foodcost" },
+              sellprice: { $sum: "$sellprice" },
+              invoices: "$invoices",
+              profit: { $subtract: ["$sellprice", "$foodCost"] }, // Calculate profit
+              invoiceCount: { $sum: { $size: "$invoices" } }
+            }
+          },
+          invoiceCount: { $sum: { $size: "$invoices" } }
+        }
+      },
+      {
+        $group: {
+          _id: { year: "$yearnum" },
+          yearnum: { $first: "$yearnum" },
+          month: {
+            $push: {
+              monthnum: "$monthnum",
+              invoiceCount: "$invoiceCount",
+              foodCount: { $sum: "$day.foodCount" },
+              foodcost: { $sum: "$day.foodcost" },
+              sellprice: { $sum: "$day.sellprice" },
+              profit: { $subtract: [{ $sum: "$day.sellprice" }, { $sum: "$day.foodCost" }] }, // Calculate profit
+              day: "$day",
+
+            }
+          },
+          foodCount: { $sum: "$foodCount" },
+
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          year: {
+            $push: {
+              yearnum: "$yearnum",
+              invoiceCount: { $sum: "$month.invoiceCount" },
+              foodCount: { $sum: "$month.foodCount" },
+              foodcost: { $sum: "$month.foodcost" },
+              sellprice: { $sum: "$month.sellprice" },
+              profit: { $subtract: [{ $sum: "$month.sellprice" }, { $sum: "$month.foodCost" }] }, // Calculate profit
+              month: "$month"
+
+            }
+          },
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          year: 1,
+        }
+      },
+    ]);
+
+    const productnum = await Food.aggregate([
+      {
+        $match: {
+          deleted: false,
+          active: true
+          // progressdata: { $gte: fromDate, $lte: toDate }
+        }
+      },
+
+      {
+        $group: {
+          _id: null,
+          foodCount: { $sum: 1 },
+        }
+      }
+    ])
+
+
+    const overallResult = await Invoice.aggregate([
+      {
+        $match: {
+          type: "مكتمل"
+          // progressdata: { $gte: fromDate, $lte: toDate }
+        }
+      },
+      {
+        $addFields: {
+          foodCount: {
+            $size: {
+              $ifNull: ["$food.invoice", []],
+            },
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: 'foods', // The name of the 'Food' collection (lowercase plural)
+          localField: 'food.id', // The field in the 'Invoice' collection to match
+          foreignField: '_id', // The field in the 'Food' collection to match
+          as: 'foodDetails', // The alias for the joined documents
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          foodCount: { $sum: 1 },
+          foodCost: { $sum: '$foodcost' },
+          sellprice: { $sum: '$finalcost' },
+        }
+      },
+    ]);
+
+    const result = {
+      yearlyResult,
+      overallResult: overallResult,
+      productnum
+    };
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
+
+
+router.post('/invoiceanalysis', async (req, res) => {
+
+
+})
+
+
+router.post('/topfoodsell', async (req, res) => {
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1;
+  
+  const matchStage = {
+    $match: {}
+  };
+
+  // Add the condition for today's data
+  if (req.body.date == 'day') {
+    matchStage.$match.createdAt = {
+      $gte: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+      $lt: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
+    }, matchStage.$match.type = "مكتمل";
+  }
+
+  // Add the condition for current month's data
+  if (req.body.date == 'month') {
+    matchStage.$match.createdAt = {
+      $gte: new Date(today.getFullYear(), today.getMonth(), 1),
+      $lt: new Date(today.getFullYear(), today.getMonth() + 1, 1)
+    }, matchStage.$match.type = "مكتمل";
+  }
+  else{ 
+    matchStage.$match.type = "مكتمل";
+  }
+
+
+  Invoice.aggregate([
+    matchStage,
+    {
+      $unwind: '$food'
+    },
+    {
+      $group: {
+        _id: '$food.id',
+        foodName: { $first: '$food.name' },
+        totalQuantitySold: { $sum: '$food.quantity' }
+      }
+    },
+    {
+      $lookup: {
+        from: 'foods', // Replace 'foods' with the name of the collection storing food details
+        localField: '_id',
+        foreignField: '_id',
+        as: 'foodDetails'
+      }
+    },
+    {
+      $unwind: '$foodDetails'
+    },
+    {
+      $project: {
+        _id: 1,
+        foodName: '$foodDetails.name', // Use the actual field name in your 'Food' schema for the food name
+        totalQuantitySold: 1
+      }
+    },
+    {
+      $sort: { totalQuantitySold: -1 }
+    },
+    {
+      $limit: 4
+    }
+  ])
+    .then(result => {
+      res.json(result);
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'An error occurred' });
+    });
+
+})
+
+
 
 // Rest of the routes...
 module.exports = router;

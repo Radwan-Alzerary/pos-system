@@ -205,7 +205,7 @@
                             </td>
                             <td class="text-center px-6 py-4">
                                 <div
-                                    class="<%if(invoices.type == 'ملغى'){%>bg-red-200 <%}else if(invoices.type == 'مكتمل'){%> bg-green-200<%}else if(invoices.type == 'قيد المعالجة'){%> bg-blue-200 <%}%> rounded-xl text-black w-24 h-6 flex justify-center items-center">
+                                    class="<%if(invoices.type == 'ملغى'){%>bg-red-200 <%}else if(invoices.type == 'مكتمل' || invoices.type == 'توصيل'){%> bg-green-200<%}else if(invoices.type == 'قيد المعالجة'){%> bg-blue-200 <%}%> rounded-xl text-black w-24 h-6 flex justify-center items-center">
                                     <%=invoices.type%>
 
                                 </div>

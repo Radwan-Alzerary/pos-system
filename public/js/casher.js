@@ -94,3 +94,56 @@ function newitem(food, invoiceid, newquantity) {
     // Append the invoice div to the main invoicefood div
     invoiceFoodDiv.appendChild(invoiceDiv);
 }
+
+
+function addmoney(money) {
+    oldgetamont = Number($("#amontget").val())
+    moneyamont = Number($(`#orderamount`).val())
+    $("#amontget").val(Number(money + oldgetamont))
+    $("#amontleft").text(moneyamont - Number($("#amontget").val()))
+
+}
+function amontgetchange(){
+    moneyamont = Number($(`#orderamount`).val())
+    $("#amontleft").text(moneyamont - Number($("#amontget").val()))
+}
+function fullamontchange(){
+    moneyamont = Number($(`#orderamount`).val())
+    $("#amontleft").text(moneyamont - Number($("#amontget").val()))
+
+}
+
+$("#reloadfoods").on('click', (event) => {
+    refrash()
+})
+
+$("#translateinvoice").on('click', (event) => {
+    if (!$('#shadedbackground').hasClass('hidden')) {
+        $('#shadedbackground').addClass('hidden');
+        $('#editableform').addClass('hidden');
+    } else {
+        $(`#shadedbackground`).removeClass('hidden');
+        $(`#editableform`).removeClass('hidden');
+    }
+})
+$('#shadedbackground').on('click', (event) => {
+    $('#shadedbackground').addClass('hidden');
+    $('#moneybackform').addClass('hidden');
+    $('#editableform').addClass('hidden');
+    $("#amontleft").text("")
+
+})
+
+function showmoneyback(){
+    if (!$('#shadedbackground').hasClass('hidden')) {
+        $('#shadedbackground').addClass('hidden');
+        $('#moneybackform').addClass('hidden');
+    } else {
+        orderamount = Number($('#finalcost').text())
+        $(`#orderamount`).val(orderamount)
+        $("#amontleft").text(orderamount)
+
+        $(`#shadedbackground`).removeClass('hidden');
+        $(`#moneybackform`).removeClass('hidden');
+    }
+}

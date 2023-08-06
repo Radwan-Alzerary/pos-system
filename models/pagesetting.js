@@ -23,11 +23,17 @@ const SettingSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-    dollarprice: { type: Number,
-        default:"1"
+    dollarprice: {
+        type: Number,
+        default: "1"
+    },
+    systemdiscount: {
+        active : {type:Boolean,default:true},
+        discountype: { type: String },
+        amount: { type: Number, default: 0 }
     },
     deleverytable: { type: mongoose.Schema.Types.ObjectId, ref: 'Table' },
-    invoicefooter : {type:String}
+    invoicefooter: { type: String }
 }, {
     timestamps: true
 });

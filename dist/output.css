@@ -1111,10 +1111,6 @@ input:checked + .toggle-bg {
   top: 50%;
 }
 
-.left-3 {
-  left: 0.75rem;
-}
-
 .z-10 {
   z-index: 10;
 }
@@ -1336,10 +1332,6 @@ input:checked + .toggle-bg {
   height: 5rem;
 }
 
-.h-28 {
-  height: 7rem;
-}
-
 .h-3 {
   height: 0.75rem;
 }
@@ -1350,6 +1342,10 @@ input:checked + .toggle-bg {
 
 .h-4 {
   height: 1rem;
+}
+
+.h-40 {
+  height: 10rem;
 }
 
 .h-5 {
@@ -1378,10 +1374,6 @@ input:checked + .toggle-bg {
 
 .h-screen {
   height: 100vh;
-}
-
-.min-h-\[auto\] {
-  min-height: auto;
 }
 
 .w-1\/2 {
@@ -1456,10 +1448,6 @@ input:checked + .toggle-bg {
   width: 20rem;
 }
 
-.w-\[33\%\] {
-  width: 33%;
-}
-
 .w-full {
   width: 100%;
 }
@@ -1476,20 +1464,12 @@ input:checked + .toggle-bg {
   max-width: 1536px;
 }
 
-.max-w-\[90\%\] {
-  max-width: 90%;
-}
-
 .flex-1 {
   flex: 1 1 0%;
 }
 
 .flex-shrink {
   flex-shrink: 1;
-}
-
-.origin-\[0_0\] {
-  transform-origin: 0 0;
 }
 
 .-translate-x-full {
@@ -1720,12 +1700,6 @@ input:checked + .toggle-bg {
   overflow-y: scroll;
 }
 
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -1840,6 +1814,11 @@ input:checked + .toggle-bg {
 .border-orange-200 {
   --tw-border-opacity: 1;
   border-color: rgb(252 217 189 / var(--tw-border-opacity));
+}
+
+.border-primary1 {
+  --tw-border-opacity: 1;
+  border-color: rgb(60 80 224 / var(--tw-border-opacity));
 }
 
 .border-violet-50 {
@@ -2144,11 +2123,6 @@ input:checked + .toggle-bg {
   padding-bottom: 1.5rem;
 }
 
-.py-\[0\.32rem\] {
-  padding-top: 0.32rem;
-  padding-bottom: 0.32rem;
-}
-
 .pb-16 {
   padding-bottom: 4rem;
 }
@@ -2209,20 +2183,12 @@ input:checked + .toggle-bg {
   padding-top: 0.75rem;
 }
 
-.pt-4 {
-  padding-top: 1rem;
-}
-
 .pt-6 {
   padding-top: 1.5rem;
 }
 
 .pt-7 {
   padding-top: 1.75rem;
-}
-
-.pt-\[0\.37rem\] {
-  padding-top: 0.37rem;
 }
 
 .text-left {
@@ -2299,10 +2265,6 @@ input:checked + .toggle-bg {
   line-height: 1.25;
 }
 
-.leading-\[1\.6\] {
-  line-height: 1.6;
-}
-
 .text-black {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -2348,6 +2310,11 @@ input:checked + .toggle-bg {
   color: rgb(37 154 230 / var(--tw-text-opacity));
 }
 
+.text-primary1 {
+  --tw-text-opacity: 1;
+  color: rgb(60 80 224 / var(--tw-text-opacity));
+}
+
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(240 82 82 / var(--tw-text-opacity));
@@ -2356,11 +2323,6 @@ input:checked + .toggle-bg {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-neutral-500 {
-  --tw-text-opacity: 1;
-  color: rgb(115 115 115 / var(--tw-text-opacity));
 }
 
 .opacity-0 {
@@ -2470,16 +2432,8 @@ input:checked + .toggle-bg {
   transition-duration: 150ms;
 }
 
-.duration-200 {
-  transition-duration: 200ms;
-}
-
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
-
-.ease-linear {
-  transition-timing-function: linear;
 }
 
 @media (min-width: 1280px) {
@@ -2794,52 +2748,8 @@ input:checked + .toggle-bg {
   --tw-ring-color: rgb(249 128 128 / var(--tw-ring-opacity));
 }
 
-.focus\:placeholder\:opacity-100:focus::-moz-placeholder {
-  opacity: 1;
-}
-
-.focus\:placeholder\:opacity-100:focus::placeholder {
-  opacity: 1;
-}
-
 .group:hover .group-hover\:opacity-75 {
   opacity: 0.75;
-}
-
-.peer:focus ~ .peer-focus\:-translate-y-\[0\.9rem\] {
-  --tw-translate-y: -0.9rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.peer:focus ~ .peer-focus\:scale-\[0\.8\] {
-  --tw-scale-x: 0.8;
-  --tw-scale-y: 0.8;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.data-\[te-input-state-active\]\:placeholder\:opacity-100[data-te-input-state-active]::-moz-placeholder {
-  opacity: 1;
-}
-
-.data-\[te-input-state-active\]\:placeholder\:opacity-100[data-te-input-state-active]::placeholder {
-  opacity: 1;
-}
-
-.peer[data-te-input-state-active] ~ .peer-data-\[te-input-state-active\]\:-translate-y-\[0\.9rem\] {
-  --tw-translate-y: -0.9rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.peer[data-te-input-state-active] ~ .peer-data-\[te-input-state-active\]\:scale-\[0\.8\] {
-  --tw-scale-x: 0.8;
-  --tw-scale-y: 0.8;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .motion-reduce\:transition-none {
-    transition-property: none;
-  }
 }
 
 :is(.dark .dark\:divide-gray-600) > :not([hidden]) ~ :not([hidden]) {
@@ -2937,11 +2847,6 @@ input:checked + .toggle-bg {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-:is(.dark .dark\:text-neutral-200) {
-  --tw-text-opacity: 1;
-  color: rgb(229 229 229 / var(--tw-text-opacity));
-}
-
 :is(.dark .dark\:placeholder-gray-400)::-moz-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgb(156 163 175 / var(--tw-placeholder-opacity));
@@ -2954,16 +2859,6 @@ input:checked + .toggle-bg {
 
 :is(.dark .dark\:ring-offset-gray-800) {
   --tw-ring-offset-color: #1F2937;
-}
-
-:is(.dark .dark\:placeholder\:text-neutral-200)::-moz-placeholder {
-  --tw-text-opacity: 1;
-  color: rgb(229 229 229 / var(--tw-text-opacity));
-}
-
-:is(.dark .dark\:placeholder\:text-neutral-200)::placeholder {
-  --tw-text-opacity: 1;
-  color: rgb(229 229 229 / var(--tw-text-opacity));
 }
 
 :is(.dark .dark\:hover\:border-gray-600:hover) {
@@ -3125,10 +3020,6 @@ input:checked + .toggle-bg {
     padding-left: 2rem;
     padding-right: 2rem;
   }
-
-  .lg\:pr-10 {
-    padding-right: 2.5rem;
-  }
 }
 
 @media (min-width: 1280px) {
@@ -3186,12 +3077,4 @@ input:checked + .toggle-bg {
   .\32xl\:p-10 {
     padding: 2.5rem;
   }
-}
-
-.\[\&\:not\(\[data-te-input-placeholder-active\]\)\]\:placeholder\:opacity-0:not([data-te-input-placeholder-active])::-moz-placeholder {
-  opacity: 0;
-}
-
-.\[\&\:not\(\[data-te-input-placeholder-active\]\)\]\:placeholder\:opacity-0:not([data-te-input-placeholder-active])::placeholder {
-  opacity: 0;
 }

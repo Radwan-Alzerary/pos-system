@@ -3,10 +3,10 @@ const path = require('path');
 
 const cors = require('cors');
 const morgan = require('morgan');
-
+const compression = require('compression')
 const app = express();
 const port = process.env.PORT || 3000;
-
+app.use(compression())
 app.use(morgan('dev'));
 const passport = require('passport');
 

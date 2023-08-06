@@ -6,6 +6,7 @@ const InvoiceSchema = new mongoose.Schema({
     },
     type: { type: String },
     active: { type: Boolean },
+    foodcost: {type: Number},
     fullcost: { type: Number },
     fulldiscont: { type: Number },
     finalcost: { type: Number },
@@ -18,12 +19,23 @@ const InvoiceSchema = new mongoose.Schema({
         discount: { type: Number },
         discountType: { type: String }
     }],
+    systemdiscounts:{type: Number},
     discount: { type: Number },
     progressdata: { type: Date }
-
 }, {
     timestamps: true
 });
+InvoiceSchema.pre('save', function (next) {
+    // Get the current date and time
+    const currentDate = new Date();
+
+    // Set the progressdata field to the current date and time in UTC+03:00
+    currentDate.setHours(currentDate.getHours() + 3);
+    this.progressdata = currentDate;
+
+    next();
+});
+
 const invoice = mongoose.model('Invoice', InvoiceSchema);
 
 module.exports = invoice;
