@@ -1,9 +1,32 @@
 
-function printinvoice(invoiceId,resivename, loction, phonenumber) {
+function printinvoice(invoiceId, resivename, loction, phonenumber, ReceivedAmount, RemainingAmount,printingcount) {
+    alert(printingcount)
     fetch(`/invoice/${invoiceId}/checout`)
         .then(response => response.json())
         .then(data => {
+            let remainingValue = "";
+            let remainingString = "";
 
+            if (ReceivedAmount != 0 && RemainingAmount != 0) {
+                remainingValue =
+                    `
+                    <div style="margin-top: 3px;">
+                    <a>${ReceivedAmount}</a>
+                    </div>
+                    <div style="margin-top: 3px;">
+                    <a>${RemainingAmount}</a>
+                    </div>
+
+                `
+                remainingString = `
+                <div style="margin-top: 3px;">
+                <a style="margin-right: 20px;">المبلغ المستلم</a>
+                 </div>
+                 <div style="margin-top: 3px;">
+                 <a style="margin-right: 20px;">المبلغ المرجع</a>
+                  </div>
+                `
+            }
             // Create the item rows (<tr>) with their cells (<td>)
             console.log()
             const itemRows = [
@@ -39,8 +62,8 @@ function printinvoice(invoiceId,resivename, loction, phonenumber) {
                 deleveryinfo = ""
             }
             var resivername = "";
-            if(resivename){
-                resivername= `
+            if (resivename) {
+                resivername = `
                 <div style="text-align: right;">
                 اسم العميل : ${resivename}
             </div>
@@ -50,10 +73,10 @@ function printinvoice(invoiceId,resivename, loction, phonenumber) {
 
             const invoicedateString = data.invoicedate;
             const invoicedate = new Date(invoicedateString);
-            
+
             const dateyear = `${invoicedate.getFullYear()}/${invoicedate.getMonth()}/${invoicedate.getDate()}`;
             const dateclock = `${invoicedate.getHours()}:${invoicedate.getMinutes()}:${invoicedate.getSeconds()}`;
-            
+
             const htmltoprint = `<html lang="en">
 
             <head>
@@ -193,7 +216,6 @@ function printinvoice(invoiceId,resivename, loction, phonenumber) {
                                 <td class="finalprice ">${data.finalcost}</td>
                             </tr>
             
-            
                         </tbody>
                     </table>
                     ${deleveryinfo}
@@ -207,21 +229,21 @@ function printinvoice(invoiceId,resivename, loction, phonenumber) {
             `
 
 
-let tablenum ="";
+            let tablenum = "";
 
-if(data.tablenumber < 100){
-    tablenum=`
+            if (data.tablenumber < 100) {
+                tablenum = `
     <div style="margin-left: 27px;">
     ر.الطاولة: ${data.tablenumber}
     </div>
     `
-}else{
-    tablenum=`
+            } else {
+                tablenum = `
     <div style="margin-left: 27px;">
     دلفري
     </div>
     `
-}
+            }
 
 
 
@@ -327,11 +349,12 @@ if(data.tablenumber < 100){
                 <div style="margin-top: 3px;">
                     <a style="margin-right: 20px;">اجمالي الخصومات</a>
                 </div>
+
                 <div style="margin-top: 7px;font-weight: bold;">
                     <a style="margin-right: 20px;">د.ع المجموع</a>
                 </div>
-                
-                
+                ${remainingString}
+
             </div>
             <div style="text-align: center;">
                 <div>
@@ -340,9 +363,12 @@ if(data.tablenumber < 100){
                 <div style="margin-top: 3px;">
                     <a>${data.fulldiscont}</a>
                 </div>
+
                 <div style="margin-top: 3px;font-weight: bold; border: 2px solid black;padding: 2px;">
                     <a>${data.finalcost}</a>
                 </div>
+                ${remainingValue}
+
 
             </div>
 
@@ -357,7 +383,7 @@ if(data.tablenumber < 100){
         </div>
     </div>
 
-        <div class="centerdiv" style="padding-top: 10px; font-size:1.8rem">
+        <div class="centerdiv" style="padding-top: 10px;text-align: center; font-size:1.8rem">
             ${data.setting.invoicefooter}
         </div>
 
@@ -375,7 +401,7 @@ if(data.tablenumber < 100){
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ htmbody: htmltoprint2 })
+                body: JSON.stringify({ htmbody: htmltoprint2,printingcount:printingcount })
             })
                 .then(response => response.json())
                 .then(data => {

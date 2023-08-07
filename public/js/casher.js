@@ -26,7 +26,7 @@ function newitem(food, invoiceid, newquantity) {
 
     // Create the price element
     const priceDiv = document.createElement('div');
-    priceDiv.classList.add('w-24','text-center');
+    priceDiv.classList.add('w-24', 'text-center');
     priceDiv.id = `price${food._id}`;
     priceDiv.textContent = `${food.price}`; // Replace `food.price` with the actual property that holds the price
 
@@ -36,7 +36,7 @@ function newitem(food, invoiceid, newquantity) {
 
     // Create the food name element
     const foodNameDiv = document.createElement('div');
-    foodNameDiv.classList.add('text-sm','w-24','text-center', 'font-bold');
+    foodNameDiv.classList.add('text-sm', 'w-24', 'text-center', 'font-bold');
     const foodNameLink = document.createElement('a');
     foodNameLink.textContent = food.name; // Replace `food.name` with the actual property that holds the food name
     foodNameDiv.appendChild(foodNameLink);
@@ -97,17 +97,39 @@ function newitem(food, invoiceid, newquantity) {
 
 
 function addmoney(money) {
+
+
     oldgetamont = Number($("#amontget").val())
     moneyamont = Number($(`#orderamount`).val())
     $("#amontget").val(Number(money + oldgetamont))
     $("#amontleft").text(moneyamont - Number($("#amontget").val()))
 
+
+    const amountchagnge = $(`#amontget`).val()
+    $('#ReceivedAmountInput').val(amountchagnge)
+    const receivesAmountValue =$(`#amontget`).val()
+    const finalCostValue = $('#finalcost').text()
+    $("#Received-amount").text(receivesAmountValue)
+    if ((receivesAmountValue - finalCostValue) > 0) {
+        $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+    }
+
 }
-function amontgetchange(){
+function amontgetchange() {
+    const amountchagnge = $(`#amontget`).val()
+    $('#ReceivedAmountInput').val(amountchagnge)
+    const receivesAmountValue =$(`#amontget`).val()
+    const finalCostValue = $('#finalcost').text()
+    $("#Received-amount").text(receivesAmountValue)
+    if ((receivesAmountValue - finalCostValue) > 0) {
+        $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+    }
+
+
     moneyamont = Number($(`#orderamount`).val())
     $("#amontleft").text(moneyamont - Number($("#amontget").val()))
 }
-function fullamontchange(){
+function fullamontchange() {
     moneyamont = Number($(`#orderamount`).val())
     $("#amontleft").text(moneyamont - Number($("#amontget").val()))
 
@@ -130,11 +152,12 @@ $('#shadedbackground').on('click', (event) => {
     $('#shadedbackground').addClass('hidden');
     $('#moneybackform').addClass('hidden');
     $('#editableform').addClass('hidden');
+    $('#printingsettingform').addClass('hidden');
     $("#amontleft").text("")
 
 })
 
-function showmoneyback(){
+function showmoneyback() {
     if (!$('#shadedbackground').hasClass('hidden')) {
         $('#shadedbackground').addClass('hidden');
         $('#moneybackform').addClass('hidden');
@@ -146,4 +169,54 @@ function showmoneyback(){
         $(`#shadedbackground`).removeClass('hidden');
         $(`#moneybackform`).removeClass('hidden');
     }
+}
+
+function showprinterform() {
+    if (!$('#shadedbackground').hasClass('hidden')) {
+        $('#shadedbackground').addClass('hidden');
+        $('#printingsettingform').addClass('hidden');
+    } else {
+        $(`#shadedbackground`).removeClass('hidden');
+        $(`#printingsettingform`).removeClass('hidden');
+    }
+}
+
+
+function ReceivedAmountInput() {
+    const receivesAmountValue = $('#ReceivedAmountInput').val()
+    const finalCostValue = $('#finalcost').text()
+    $("#Received-amount").text(receivesAmountValue)
+    if ((receivesAmountValue - finalCostValue) > 0) {
+        $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+    }
+}
+
+
+function getprices(invoiceId) {
+    fetch("/invoice/price/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ invoiceId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            $("#finalcost").text(data.finalprice);
+            $("#totalprice").text(data.total);
+            $("#totaldiscount").text(data.totaldiscount);
+            const receivesAmountValue = $('#ReceivedAmountInput').val()
+            const finalCostValue = $('#finalcost').text()
+
+            $("#Received-amount").text(receivesAmountValue)
+            if ((receivesAmountValue - finalCostValue) > 0) {
+                $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+            }
+            $("#totalcost").text(data.totalcost);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle errors
+        });
 }

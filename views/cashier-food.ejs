@@ -28,7 +28,8 @@
             value="تحويل">
     </form>
 
-    <div id="moneybackform" class=" fixed hidden flex flex-col justify-center gap-5 items-center  w-1/2 h-1/2  bg-white p-5 rounded-xl z-50"
+    <div id="moneybackform"
+        class=" fixed hidden flex flex-col justify-center gap-5 items-center  w-1/2 h-1/2  bg-white p-5 rounded-xl z-50"
         style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
         <div>
             <div class="items-center text-center">
@@ -77,13 +78,35 @@
 
             </div>
             <div class="w-[33%]">
-                <input type="text" placeholder="المبلغ المستلم" id="amontget" oninput="amontgetchange()" name="name" id="resivename"
+                <input type="text" placeholder="المبلغ المستلم" id="amontget" oninput="amontgetchange()" name="name"
+                    id="resivename"
                     class="bg-gray-50 mb-2 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
             </div>
         </div>
 
     </div>
+
+
+
+    <div id="printingsettingform"
+        class=" fixed hidden flex flex-col justify-center gap-5 items-center  w-3/12 h-3/12  bg-white p-5 rounded-xl z-50"
+        style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+        <div class="text-center flex justify-center items-center">
+            <a>
+                عدد الطبعات
+            </a>
+        </div>
+        <div >
+            <input type="text"  value="2"  name="name"    id="printingcount"
+
+                class="bg-gray-50 text-center mb-2  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </div>
+
+
+    </div>
+
+
 
     <div class="flex">
         <div class="w-1/4" style="width: 30%;">
@@ -121,16 +144,31 @@
                                 d="M400 255.4V240 208c0-8.8-7.2-16-16-16H352 336 289.5c-50.9 0-93.9 33.5-108.3 79.6c-3.3-9.4-5.2-19.8-5.2-31.6c0-61.9 50.1-112 112-112h48 16 32c8.8 0 16-7.2 16-16V80 64.6L506 160 400 255.4zM336 240h16v48c0 17.7 14.3 32 32 32h3.7c7.9 0 15.5-2.9 21.4-8.2l139-125.1c7.6-6.8 11.9-16.5 11.9-26.7s-4.3-19.9-11.9-26.7L409.9 8.9C403.5 3.2 395.3 0 386.7 0C367.5 0 352 15.5 352 34.7V80H336 304 288c-88.4 0-160 71.6-160 160c0 60.4 34.6 99.1 63.9 120.9c5.9 4.4 11.5 8.1 16.7 11.2c4.4 2.7 8.5 4.9 11.9 6.6c3.4 1.7 6.2 3 8.2 3.9c2.2 1 4.6 1.4 7.1 1.4h2.5c9.8 0 17.8-8 17.8-17.8c0-7.8-5.3-14.7-11.6-19.5l0 0c-.4-.3-.7-.5-1.1-.8c-1.7-1.1-3.4-2.5-5-4.1c-.8-.8-1.7-1.6-2.5-2.6s-1.6-1.9-2.4-2.9c-1.8-2.5-3.5-5.3-5-8.5c-2.6-6-4.3-13.3-4.3-22.4c0-36.1 29.3-65.5 65.5-65.5H304h32zM72 32C32.2 32 0 64.2 0 104V440c0 39.8 32.2 72 72 72H408c39.8 0 72-32.2 72-72V376c0-13.3-10.7-24-24-24s-24 10.7-24 24v64c0 13.3-10.7 24-24 24H72c-13.3 0-24-10.7-24-24V104c0-13.3 10.7-24 24-24h64c13.3 0 24-10.7 24-24s-10.7-24-24-24H72z" />
                         </svg>
                     </div>
+                    <div id="printersetting" onclick="showprinterform()"
+                        class="w-10 h-10 flex justify-center  items-center rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="printericon" height="1em"
+                            viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                            <style>
+                                #printericon {
+                                    fill: #826fe2
+                                }
+                            </style>
+                            <path
+                                d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zM432 248a24 24 0 1 1 0 48 24 24 0 1 1 0-48z" />
+                        </svg>
+                    </div>
+
                 </div>
-                <div class="w-24 h-10 rounded-lg flex justify-center  items-center  cursor-pointer bg-gray-100" onclick="showmoneyback()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="fill-green-500" height="1.5em" 
+                <div class="w-24 h-10 rounded-lg flex justify-center  items-center  cursor-pointer bg-gray-100"
+                    onclick="showmoneyback()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="fill-green-500" height="1.5em"
                         viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                         <path
                             d="M535 41c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l64 64c4.5 4.5 7 10.6 7 17s-2.5 12.5-7 17l-64 64c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l23-23L384 112c-13.3 0-24-10.7-24-24s10.7-24 24-24l174.1 0L535 41zM105 377l-23 23L256 400c13.3 0 24 10.7 24 24s-10.7 24-24 24L81.9 448l23 23c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L7 441c-4.5-4.5-7-10.6-7-17s2.5-12.5 7-17l64-64c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9zM96 64H337.9c-3.7 7.2-5.9 15.3-5.9 24c0 28.7 23.3 52 52 52l117.4 0c-4 17 .6 35.5 13.8 48.8c20.3 20.3 53.2 20.3 73.5 0L608 169.5V384c0 35.3-28.7 64-64 64H302.1c3.7-7.2 5.9-15.3 5.9-24c0-28.7-23.3-52-52-52l-117.4 0c4-17-.6-35.5-13.8-48.8c-20.3-20.3-53.2-20.3-73.5 0L32 342.5V128c0-35.3 28.7-64 64-64zm64 64H96v64c35.3 0 64-28.7 64-64zM544 320c-35.3 0-64 28.7-64 64h64V320zM320 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192z" />
                     </svg>
                 </div>
             </div>
-            <div id="invoicefood" class="bg-white relative overflow-auto h-80">
+            <div id="invoicefood" class="bg-white relative overflow-auto h-72">
 
             </div>
 
@@ -140,8 +178,14 @@
                     <input type="text" placeholder="اسم المستلم" name="name" id="resivename"
                         class="bg-gray-50 mb-2 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
-                    <input type="text" placeholder="خصم" name="name" oninput="discountchange(event)" id="discontinput"
-                        class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <div class="flex">
+                        <input type="text" placeholder="خصم" name="name" oninput="discountchange(event)"
+                            id="discontinput"
+                            class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="text" placeholder="المبلغ المستلم" name="name" oninput="ReceivedAmountInput(event)"
+                            id="ReceivedAmountInput"
+                            class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
                 </div>
 
 
@@ -154,14 +198,27 @@
                 </div>
                 <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
                 <div class="flex justify-around my-1 gap-16 items-center">
+                    <div class="font-medium text-sm"><a id="Received-amount">0</a><span> IQD</span></div>
+                    <div class="text-gray-600 text-sm"><a>المبلغ المستلم</a></div>
+                </div>
+                <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
+                <div class="flex justify-around my-1 gap-16 items-center">
+                    <div class="font-medium text-sm"><a id="Remaining-amount">0</a><span> IQD</span></div>
+                    <div class="text-gray-600 text-sm"><a>المبلغ المتبقي</a></div>
+                </div>
+                <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
+
+                <div class="flex justify-around my-1 gap-16 items-center">
                     <div class="font-medium text-sm"><a id="totaldiscount">0</a><span> IQD</span></div>
                     <div class="text-gray-600 text-sm"><a>الخصومات</a></div>
                 </div>
-                <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
+                <div class="w-full h-0.5  bg-slate-400 opacity-20"></div>
+
                 <div class="flex justify-around my-1 gap-16 items-center">
                     <div class="font-bold"><a id="finalcost">0</a><span> IQD</span></div>
                     <div class="text-black text-base font-semibold"><a>السعر النهائي</a></div>
                 </div>
+
                 <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
                 <div class="flex items-center p-3 gap-4">
                     <div class="w-1/2">
@@ -296,9 +353,6 @@
                         });
                         console.log('Overall total price:', totalPrice);
                         console.log('Overall total price:', fulldiscount);
-                        $("#totaldiscount").text(`${fulldiscount}`);
-                        $("#totalprice").text(`${totalPrice}`);
-                        $("#finalcost").text(`${totalPrice - fulldiscount}`);
                     })
                     .catch(error => {
                         console.error(error);
@@ -444,18 +498,30 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ tableId,foodcost, resivename, invoiceId, finalcost, totalcost, totaldicont })
+                    body: JSON.stringify({ tableId, foodcost, resivename, invoiceId, finalcost, totalcost, totaldicont })
                 })
                     .then(response => response.json())
                     .then(data => {
+                        const ReceivedAmount = $("#Received-amount").text()
+                        const RemainingAmount = $("#Remaining-amount").text()
+
                         console.log(data)
                         $("#finalcost").text(0);
                         $("#totalprice").text(0);
                         $("#totaldiscount").text(0)
                         $("#invoiceidelement").text(" ");
+
+                        $("#Received-amount").text(0)
+                        $("#Remaining-amount").text(0)
+                        $("#ReceivedAmountInput").val(0)
+
+                        $("#totalcost").text(data.totalcost);
+
                         const invoiceFoodDiv = document.getElementById("invoicefood");
                         invoiceFoodDiv.innerHTML = "";
-                        printinvoice(invoiceId, resivename, "", "")
+
+                        const printingcountvalue = $('#printingcount').val()
+                        printinvoice(invoiceId, resivename, "", "", ReceivedAmount, RemainingAmount,printingcountvalue)
 
                     })
                     .catch(error => {
@@ -609,27 +675,6 @@
                     });
             }
 
-            function getprices(invoiceId) {
-                fetch("/invoice/price/", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ invoiceId })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data)
-                        $("#finalcost").text(data.finalprice);
-                        $("#totalprice").text(data.total);
-                        $("#totaldiscount").text(data.totaldiscount);
-                        $("#totalcost").text(data.totalcost);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Handle errors
-                    });
-            }
 
             $("#previosinvoice").on('click', (event) => {
                 const currentUrl = window.location.href;
@@ -637,8 +682,6 @@
                 const url = new URL(currentUrl);
                 const searchParams = new URLSearchParams(url.search);
                 const tableId = searchParams.get("tableid");
-
-
 
                 console.log(tableId)
                 fetch("/invoice/previesinvoice/", {
@@ -661,8 +704,8 @@
                         // Handle errors
                     });
             })
-            
-      </script>
+
+        </script>
 
 
         <script src="/js/casher.js"></script>

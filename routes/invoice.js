@@ -9,7 +9,7 @@ const nodeHtmlToImage = require('node-html-to-image')
 const { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } = require('node-thermal-printer');
 const puppeteer = require('puppeteer');
 const browserPromise = puppeteer.launch(); // Launch the browser once
-async function printImageAsync(imagePath) {
+async function printImageAsync(imagePath, printincount) {
   const setting = await Setting.findOne()
 
   const printer = new ThermalPrinter({
@@ -29,8 +29,9 @@ async function printImageAsync(imagePath) {
     await printer.printImage(`./public${setting.shoplogo}`);  // Print PNG image
     await printer.printImage(imagePath);  // Print PNG image
     await printer.cut();
-    await printer.execute();
-    await printer.execute();
+    for (i = 0; i < printincount; i++) {
+      await printer.execute();
+    }
     console.log('Image printed successfully.');
   } catch (error) {
     console.error('Error printing image:', error);
@@ -390,6 +391,7 @@ router.post('/finish', async (req, res) => {
 router.post('/printinvoice', async (req, res) => {
   try {
     const htmlContent = req.body.htmbody;
+    const printincount = req.body.printingcount
 
     const generateImage = async () => {
       const browser = await browserPromise; // Reuse the same browser instance
@@ -409,7 +411,7 @@ router.post('/printinvoice', async (req, res) => {
     };
 
     await generateImage(); // Generate the image asynchronously
-    await printImageAsync("./image.png")
+    await printImageAsync("./image.png", printincount)
     res.status(200).json({ msg: "done" });
   } catch (err) {
     console.error(err);
@@ -714,7 +716,7 @@ router.post('/invoiceanalysis', async (req, res) => {
 router.post('/topfoodsell', async (req, res) => {
   const today = new Date();
   const currentMonth = today.getMonth() + 1;
-  
+
   const matchStage = {
     $match: {}
   };
@@ -734,7 +736,7 @@ router.post('/topfoodsell', async (req, res) => {
       $lt: new Date(today.getFullYear(), today.getMonth() + 1, 1)
     }, matchStage.$match.type = "مكتمل";
   }
-  else{ 
+  else {
     matchStage.$match.type = "مكتمل";
   }
 
