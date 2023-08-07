@@ -112,7 +112,10 @@ function addmoney(money) {
     $("#Received-amount").text(receivesAmountValue)
     if ((receivesAmountValue - finalCostValue) > 0) {
         $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+    }else{
+        $("#Remaining-amount").text(0)
     }
+
 
 }
 function amontgetchange() {
@@ -123,6 +126,8 @@ function amontgetchange() {
     $("#Received-amount").text(receivesAmountValue)
     if ((receivesAmountValue - finalCostValue) > 0) {
         $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+    }else{
+        $("#Remaining-amount").text(0)
     }
 
 
@@ -188,7 +193,10 @@ function ReceivedAmountInput() {
     $("#Received-amount").text(receivesAmountValue)
     if ((receivesAmountValue - finalCostValue) > 0) {
         $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+    }else{
+        $("#Remaining-amount").text(0)
     }
+
 }
 
 
@@ -212,7 +220,10 @@ function getprices(invoiceId) {
             $("#Received-amount").text(receivesAmountValue)
             if ((receivesAmountValue - finalCostValue) > 0) {
                 $("#Remaining-amount").text(receivesAmountValue - finalCostValue)
+            }else{
+                $("#Remaining-amount").text(0)
             }
+        
             $("#totalcost").text(data.totalcost);
         })
         .catch(error => {
