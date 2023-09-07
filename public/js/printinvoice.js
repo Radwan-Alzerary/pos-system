@@ -1,15 +1,23 @@
+function printinvoice(
+  invoiceId,
+  resivename,
+  loction,
+  phonenumber,
+  ReceivedAmount,
+  RemainingAmount,
+  printingcount,
+  Comments
+) {
+  // alert(printingcount)
+  console.log(Comments);
+  fetch(`/invoice/${invoiceId}/checout`)
+    .then((response) => response.json())
+    .then((data) => {
+      let remainingValue = "";
+      let remainingString = "";
 
-function printinvoice(invoiceId, resivename, loction, phonenumber, ReceivedAmount, RemainingAmount,printingcount) {
-    alert(printingcount)
-    fetch(`/invoice/${invoiceId}/checout`)
-        .then(response => response.json())
-        .then(data => {
-            let remainingValue = "";
-            let remainingString = "";
-
-            if (ReceivedAmount != 0 && RemainingAmount != 0) {
-                remainingValue =
-                    `
+      if (ReceivedAmount != 0 && RemainingAmount != 0) {
+        remainingValue = `
                     <div style="margin-top: 3px;">
                     <a>${ReceivedAmount}</a>
                     </div>
@@ -17,38 +25,42 @@ function printinvoice(invoiceId, resivename, loction, phonenumber, ReceivedAmoun
                     <a>${RemainingAmount}</a>
                     </div>
 
-                `
-                remainingString = `
+                `;
+        remainingString = `
                 <div style="margin-top: 3px;">
                 <a style="margin-right: 20px;">المبلغ المستلم</a>
                  </div>
                  <div style="margin-top: 3px;">
                  <a style="margin-right: 20px;">المبلغ المرجع</a>
                   </div>
-                `
-            }
-            // Create the item rows (<tr>) with their cells (<td>)
-            console.log()
-            const itemRows = [
-            ];
-            data.food.forEach(food => {
-                itemRows.push([`${food.id.name}`, `${food.quantity}`, `${food.id.price}`, `${Number(food.quantity) * Number(food.id.price)}`]);
-            })
-            var items = ""
+                `;
+      }
+      // Create the item rows (<tr>) with their cells (<td>)
+      // console.log()
+      const itemRows = [];
+      data.food.forEach((food) => {
+        itemRows.push([
+          `${food.id.name}`,
+          `${food.quantity}`,
+          `${food.id.price}`,
+          `${Number(food.quantity) * Number(food.id.price)}`,
+        ]);
+      });
+      var items = "";
 
-            for (const item of itemRows) {
-                items += `
+      for (const item of itemRows) {
+        items += `
                 <tr>
                 <td class="description">${item[2]}</td>
                 <td class="quantity">${item[1]}</td>
                 <td class="price">${item[0]}</td>
                 <td class="price">${item[3]}</td>
             </tr>
-                `
-            }
-            var deleveryinfo = "";
-            if (loction && phonenumber) {
-                deleveryinfo = `
+                `;
+      }
+      var deleveryinfo = "";
+      if (loction && phonenumber) {
+        deleveryinfo = `
                 <div style:"text-align : right">
                 <div class="footerpos" style = "text-align: right">
                 <a>عنوان الطلبية : ${loction}</a>
@@ -57,27 +69,37 @@ function printinvoice(invoiceId, resivename, loction, phonenumber, ReceivedAmoun
                 <a>رقم الهاتف : ${phonenumber}</a>
             </div>
             </div>
-            `
-            } else {
-                deleveryinfo = ""
-            }
-            var resivername = "";
-            if (resivename) {
-                resivername = `
+            `;
+      } else {
+        deleveryinfo = "";
+      }
+      var resivername = "";
+      if (resivename) {
+        resivername = `
                 <div style="text-align: right;">
                 اسم العميل : ${resivename}
             </div>
-`
-            }
-            console.log(items)
+`;
+      }
 
-            const invoicedateString = data.invoicedate;
-            const invoicedate = new Date(invoicedateString);
+      var CommentField = "";
+      if (Comments) {
+        CommentField = `
+                <div class="centerdiv" style="padding-top: 10px;text-align: center; font-size:1.6rem"">
+                الملاحضات : ${Comments}</div>
+                `;
+      }else{
+        CommentField=""
+      }
+      // console.log(items)
 
-            const dateyear = `${invoicedate.getFullYear()}/${invoicedate.getMonth()}/${invoicedate.getDate()}`;
-            const dateclock = `${invoicedate.getHours()}:${invoicedate.getMinutes()}:${invoicedate.getSeconds()}`;
+      const invoicedateString = data.invoicedate;
+      const invoicedate = new Date(invoicedateString);
 
-            const htmltoprint = `<html lang="en">
+      const dateyear = `${invoicedate.getFullYear()}/${invoicedate.getMonth()}/${invoicedate.getDate()}`;
+      const dateclock = `${invoicedate.getHours()}:${invoicedate.getMinutes()}:${invoicedate.getSeconds()}`;
+
+      const htmltoprint = `<html lang="en">
 
             <head>
                 <style>
@@ -226,30 +248,25 @@ function printinvoice(invoiceId, resivename, loction, phonenumber, ReceivedAmoun
             </body>
             
             </html>
-            `
+            `;
 
+      let tablenum = "";
 
-            let tablenum = "";
-
-            if (data.tablenumber < 100) {
-                tablenum = `
+      if (data.tablenumber < 100) {
+        tablenum = `
     <div style="margin-left: 27px;">
     ر.الطاولة: ${data.tablenumber}
     </div>
-    `
-            } else {
-                tablenum = `
+    `;
+      } else {
+        tablenum = `
     <div style="margin-left: 27px;">
     دلفري
     </div>
-    `
-            }
+    `;
+      }
 
-
-
-
-
-            const htmltoprint2 = `
+      const htmltoprint2 = `
             <!DOCTYPE html>
 <html lang="ar">
 
@@ -382,45 +399,40 @@ function printinvoice(invoiceId, resivename, loction, phonenumber, ReceivedAmoun
              الهاتف : ${data.setting.phonnumber}
         </div>
     </div>
+    ${CommentField}
 
         <div class="centerdiv" style="padding-top: 10px;text-align: center; font-size:1.8rem">
             ${data.setting.invoicefooter}
         </div>
-
         ${deleveryinfo}
-    </main>
+
+        </main>
 </body>
 </html>
             
-            `
-            console.log(htmltoprint)
+            `;
+      // console.log(htmltoprint)
 
-
-            fetch("/invoice/printinvoice/", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ htmbody: htmltoprint2,printingcount:printingcount })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle errors
-                });
-
-
+      fetch("/invoice/printinvoice/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          htmbody: htmltoprint2,
+          printingcount: printingcount,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data)
         })
-        .catch(error => {
-            console.error(error);
+        .catch((error) => {
+          console.error("Error:", error);
+          // Handle errors
         });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
-
-
-
-
-
