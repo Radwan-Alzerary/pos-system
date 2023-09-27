@@ -103,8 +103,6 @@ function addmoney(money) {
     moneyamont = Number($(`#orderamount`).val())
     $("#amontget").val(Number(money + oldgetamont))
     $("#amontleft").text(moneyamont - Number($("#amontget").val()))
-
-
     const amountchagnge = $(`#amontget`).val()
     $('#ReceivedAmountInput').val(amountchagnge)
     const receivesAmountValue =$(`#amontget`).val()
@@ -214,6 +212,8 @@ function getprices(invoiceId) {
             $("#finalcost").text(data.finalprice);
             $("#totalprice").text(data.total);
             $("#totaldiscount").text(data.totaldiscount);
+            $("#deleveryCostView").text(data.deleveryCost);
+
             const receivesAmountValue = $('#ReceivedAmountInput').val()
             const finalCostValue = $('#finalcost').text()
 

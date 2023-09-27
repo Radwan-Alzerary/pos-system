@@ -73,6 +73,7 @@ router.post('/finish', async (req, res) => {
         invoice.fulldiscont = req.body.totaldicont;
         invoice.finalcost = req.body.finalcost;
         invoice.tableid = req.body.tableId;
+        invoice.deleveryCost = req.body.deleveryCost;
 
         const currentable = await Table.findById(invoice.tableid)
 

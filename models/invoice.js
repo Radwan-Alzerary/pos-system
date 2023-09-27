@@ -21,6 +21,7 @@ const InvoiceSchema = new mongoose.Schema({
     }],
     systemdiscounts:{type: Number},
     discount: { type: Number },
+    deleveryCost: { type: Number ,default:0},
     progressdata: { type: Date }
 }, {
     timestamps: true

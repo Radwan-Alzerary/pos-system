@@ -167,13 +167,25 @@
                     </div>
                 </div>
             </div>
-            <div id="invoicefood" class="bg-white relative overflow-auto h-80">
+            <div id="invoicefood" class="bg-white relative overflow-auto h-56">
 
             </div>
-            <div class="w-full">
-                <input type="text" placeholder="اسم المستلم" name="name" id="resivename"
+            <div class="w-full flex">
+                <input type="number" placeholder="سعر التوصيل" name="name" value="0" oninput="deleveryCostChange(event)" id="deleveryCost"
                     class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" placeholder="اسم المستلم" name="name" id="resivename"
+                    class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
             </div>
+            <div class="mb-6 w-full">
+                <input
+                type="text"
+                placeholder="الملاحضات"
+                name="name"
+                id="comments"
+                class="bg-gray-50 my-2 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+                </div>
 
             <div class="mt-5 w-full flex items-center justify-center h-12">
                 <div class="mb-6 w-3/4">
@@ -188,6 +200,8 @@
                     <input type="text" placeholder="العنوان" name="name" id="deloveryname"
                         class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
+
+        
             </div>
             <div>
                 <select id="countries" name="tablenum"
@@ -211,6 +225,11 @@
                     <div class="font-medium text-sm"><a id="totaldiscount">0</a><span> IQD</span></div>
                     <div class="text-gray-600 text-sm"><a>الخصومات</a></div>
                 </div>
+                <div class="flex justify-around my-1 gap-16 items-center">
+                    <div class="font-medium text-sm"><a id="deleveryCostView">0</a><span> IQD</span></div>
+                    <div class="text-gray-600 text-sm"><a>التوصيل</a></div>
+                </div>
+
                 <div class="w-full h-0.5 bg-slate-400 opacity-20"></div>
                 <div class="flex justify-around my-1 gap-16 items-center">
                     <div class="font-bold"><a id="finalcost">0</a><span> IQD</span></div>
@@ -511,10 +530,13 @@
                             $("#totalprice").text(0);
                             $("#totaldiscount").text(0)
                             $("#invoiceidelement").text(" ");
+                            const Comments = $("#comments").val();
+                            const deleveryCost = $("#deleveryCost").val();
+
                             refrash()
                             const printingcountvalue = $('#printingcount').val()
 
-                            printinvoice(invoiceId,resivename, deloveryname, deloveryphone,"","",printingcountvalue)
+                            printinvoice(invoiceId,resivename, deloveryname, deloveryphone,"","",printingcountvalue,Comments,deleveryCost,"delevery")
 
                         })
                         .catch(error => {
@@ -887,6 +909,41 @@
                     });
             }
 
+            function deleveryCostChange(event) {
+                const inputElement = event.target;
+
+                // Retrieve the ID of the input element
+                const inputId = inputElement.id;
+
+                // Use the inputId as needed
+                const deleveryCost = $("#deleveryCost").val()
+                const currentUrl = window.location.href;
+                console.log("Current URL:", currentUrl);
+                const url = new URL(currentUrl);
+                const searchParams = new URLSearchParams(url.search);
+                const tableId = searchParams.get("tableid");
+                const invoiceId = $('#invoiceidelement').text()
+                fetch("/invoice/changedeleverycost/", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ invoiceId, deleveryCost })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        getprices(invoiceId)
+                        // $("#finalcost").text();
+                        // $("#totalprice").text();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle errors
+                    });
+            }
+
+
+
             function getprices(invoiceId) {
                 fetch("/invoice/price/", {
                     method: 'POST',
@@ -897,10 +954,11 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data)
+                        console.log(data.deleveryCost)
                         $("#finalcost").text(data.finalprice);
                         $("#totalprice").text(data.total);
                         $("#totaldiscount").text(data.totaldiscount);
+                        $("#deleveryCostView").text(data.deleveryCost);
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -968,7 +1026,6 @@
                     $('#insidelevery').addClass('bg-green-400');
                 } else {
                     indordelevery=false;
-
                     $("#deloveryphone").removeAttr("readonly");
                     $("#deloveryname").removeAttr("readonly");
                     // $("#resivename").removeAttr("readonly");

@@ -251,6 +251,28 @@ router.post('/changedescount', async (req, res) => {
   }
 });
 
+
+
+router.post('/changedeleverycost', async (req, res) => {
+  try {
+    const deleveryCost = req.body.deleveryCost
+    const invoiceid = req.body.invoiceId
+
+    let invoice = await Invoice.findById(invoiceid);
+
+    invoice.deleveryCost = deleveryCost;
+
+    // Save the updated invoice
+    await invoice.save();
+    res.json({
+      message: 'discount changed',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.post('/price', async (req, res) => {
   try {
     const invoiceId = req.body.invoiceId;
@@ -276,11 +298,12 @@ router.post('/price', async (req, res) => {
       totaldiscount += invoice.discount
 
     }
-    finalprice = total - totaldiscount;
+    finalprice = total - totaldiscount + invoice.deleveryCost;
     if (finalprice < 0) {
       finalprice = 0;
     }
-    res.json({ total, totalcost, totaldiscount, finalprice });
+   
+    res.json({ total, totalcost, totaldiscount, finalprice,deleveryCost:invoice.deleveryCost });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
