@@ -10,6 +10,10 @@ function printinvoice(
   deleveryCost,
   type
 ) {
+  if (deleveryCost) {
+  } else {
+    deleveryCost = 0;
+  }
   // alert(printingcount)
   fetch(`/invoice/${invoiceId}/checout`)
     .then((response) => response.json())
@@ -37,7 +41,7 @@ function printinvoice(
       }
       // Create the item rows (<tr>) with their cells (<td>)
       // console.log()
-      console.log(deleveryCost)
+      console.log(deleveryCost);
       const itemRows = [];
       data.food.forEach((food) => {
         itemRows.push([
