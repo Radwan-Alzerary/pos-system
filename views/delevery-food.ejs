@@ -170,14 +170,18 @@
             <div id="invoicefood" class="bg-white relative overflow-auto h-56">
 
             </div>
-            <div class="w-full flex">
-                <input type="number" placeholder="سعر التوصيل" name="name" oninput="deleveryCostChange(event)" id="deleveryCost"
-                    class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="text" placeholder="اسم المستلم" name="name" id="resivename"
-                    class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-            </div>
             <div class="mb-6 w-full">
+                <div class="flex justify-center items-center w-full">
+                    <input id="autoComplete" class="rounded-full" />
+                  </div>
+                  <div class="w-full flex">
+                    <input type="number" placeholder="سعر التوصيل" name="name" oninput="deleveryCostChange(event)" id="deleveryCost"
+                        class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="text" placeholder="اسم المستلم" name="name" id="resivename"
+                        class="bg-gray-50 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    
+                </div>
+    
                 <input
                 type="text"
                 placeholder="الملاحضات"
@@ -276,12 +280,12 @@
                                 style="height: 76vh;">
                                 <% }else{%>
                                     <div id="cataegoryfoodscontect<%=categorys.id%>"
-                                        class="hidden grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2   lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8 overflow-y-scroll "
+                                        class="hidden grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2   lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-8 overflow-y-scroll "
                                         style="height: 76vh;">
                                         <%}%>
                                             <%if(categorys.foods){%>
                                                 <%for (let i=0; i < categorys.foods.length; i++) { %>
-                                                    <div class=" group text-center bg-white "
+                                                    <div class="group h-64 text-center bg-white "
                                                         id="selectfood<%=categorys.foods[i].id%>">
                                                         <div
                                                             class="aspect-h-1 aspect-w-1  w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-6 xl:aspect-w-6">
@@ -297,6 +301,15 @@
                                                             <p class="mt-1 text-lg font-medium text-gray-900">
                                                                 <%=categorys.foods[i].price%> IQD
                                                             </p>
+                                                            
+                                                            <% if (!categorys.foods[i].unlimit){%>
+                                                                <p
+                                                                id="quntityleft-<%=categorys.foods[i].id%>"
+                                                                class="text-sm opacity-60 font-medium text-gray-900"
+                                                              >
+                                                                <%=categorys.foods[i].quantety%> المتبقي
+                                                              </p>
+                                                                                                            <%}%>
                                                         </div>
                                                     </div>
                                                     <%}}else{%>
@@ -309,6 +322,52 @@
             </div>
         </div>
         <a id="invoiceidelement" class="hidden"></a>
+        <script>
+                document
+      .querySelector("#autoComplete")
+      .addEventListener("selection", function (event) {
+        const currentUrl = window.location.href;
+        console.log("Current URL:", currentUrl);
+        const url = new URL(currentUrl);
+        const searchParams = new URLSearchParams(url.search);
+        const table = searchParams.get("tableid");
+        const foodId = event.detail.selection.value._id
+        console.log("ID:", table);
+        const tableId = table; // Replace with the actual table ID
+        fetch("/invoice/food/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ tableId, foodId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.editOneFood && !data.editOneFood.unlimit) {
+              const totalTd = document.getElementById(`quntityleft-${foodId}`);
+              totalTd.innerHTML = data.editOneFood.quantety + " المتبقي";
+            }
+
+            $("#invoiceidelement").text(`${data.invoiceId}`);
+            if (data.message == "alredyadd") {
+              console.log(data);
+              $(`#quantity${data.updatedfoodid}`).val(`${data.newquantity}`);
+              console.log($(`#quantity${data.food._id}`).text());
+              getprices($("#invoiceidelement").text());
+            } else {
+              invoiceid = $("#invoiceidelement").text();
+              console.log(data.food);
+              newitem(data.food, invoiceid, data.newquantity);
+              getprices($("#invoiceidelement").text());
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            // Handle errors
+          });
+      });
+
+        </script>
         <script>
                         <%if (category[0]) {%>
             var previosopendoor = "<%=category[0].id%>";
@@ -399,6 +458,10 @@
                     .then(response => response.json())
                     .then(data => {
                         $("#invoiceidelement").text(`${data.invoiceId}`)
+                        if (data.editOneFood && !data.editOneFood.unlimit) {
+            const totalTd = document.getElementById(`quntityleft-${foodId}`);
+            totalTd.innerHTML = data.editOneFood.quantety + " المتبقي";
+          }
 
                         if (data.message == "alredyadd") {
                             console.log(data)
@@ -435,8 +498,8 @@
                 fetch(`/invoice/${tableId}/${foodjson.invoiceid}/food/${foodjson.foodid}`, {
                     method: 'DELETE',
                 })
-                    .then(response => {
-                        if (response.ok) {
+                    .then(res => res.json()) // or res.json()
+.then(res =>{
                             deletedfoodprice = Number($(`#price${foodjson.foodid}`).text());
                             deletedfoodquantity = Number($(`#quantity${foodjson.foodid}`).val());
                             deletedfoodfinalprice = deletedfoodquantity * deletedfoodprice
@@ -448,6 +511,11 @@
                             console.log('Food item removed successfully');
                             const divToRemove = document.getElementById(`${foodjson.foodid}`);
                             // Check if the div element exists
+                            if (res.editOneFood && !res.editOneFood.unlimit) {
+            const totalTd = document.getElementById(`quntityleft-${foodjson.foodid}`);
+            totalTd.innerHTML = res.editOneFood.quantety + " المتبقي";
+          }
+
                             if (divToRemove) {
                                 // Remove the div element
                                 divToRemove.remove();
@@ -458,10 +526,11 @@
                                 console.log("Div element not found.");
                             }
 
-                        } else {
-                            throw new Error('Failed to remove food item');
-                        }
-                    })
+
+                        console.log(res)
+} )
+
+
                     .catch(error => {
                         console.error(error);
                     });
@@ -763,6 +832,79 @@
             // }
 
         </script>
+  <script>
+    // Initialize variables to store barcode data
+    let barcode = "";
+    let originBarcode = "";
+
+    // Function to handle key press events
+    const handleKeyPress = (event) => {
+      // Check for a special character (e.g., Enter) to determine the end of the barcode
+      if (event.key === "Enter") {
+        // Do something with the barcode data (e.g., send it to a server)
+        if (barcode !== "") {
+          console.log("Barcode Scanned:", barcode);
+
+          const currentUrl = window.location.href;
+          console.log("Current URL:", currentUrl);
+          const url = new URL(currentUrl);
+          const searchParams = new URLSearchParams(url.search);
+          const table = searchParams.get("tableid");
+          console.log("ID:", table);
+          const tableId = table; // Replace with the actual table ID
+          fetch("/invoice/barcodefood/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ tableId, barcode }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              $("#invoiceidelement").text(`${data.invoiceId}`);
+
+              if (data.message == "alredyadd") {
+                console.log(data);
+                $(`#quantity${data.updatedfoodid}`).val(`${data.newquantity}`);
+                console.log($(`#quantity${data.food._id}`).text());
+                getprices($("#invoiceidelement").text());
+              } else {
+                invoiceid = $("#invoiceidelement").text();
+                console.log(data.food);
+                newitem(data.food, invoiceid, data.newquantity);
+                getprices($("#invoiceidelement").text());
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle errors
+            });
+
+          originBarcode = barcode;
+          barcode = "";
+        }
+      } else {
+        // Append the scanned character to the barcode string
+        barcode += event.key;
+      }
+    };
+
+    // Function to reset the barcode after a timeout
+    const resetBarcode = () => {
+      barcode = "";
+    };
+
+    // Set a timeout to reset the barcode after 20 milliseconds
+    setTimeout(resetBarcode, 20);
+
+    // Add an event listener to capture keyboard input
+    window.addEventListener("keypress", handleKeyPress);
+
+    // Function to clean up the event listener when needed
+    const removeKeyListener = () => {
+      window.removeEventListener("keypress", handleKeyPress);
+    };
+  </script>
 
 
         <script>
@@ -791,6 +933,11 @@
                     .then(data => {
                         console.log(data.foodItem.quantity)
                         getprices(invoiceId)
+                        if (!data.editOneFood.unlimit) {
+            const totalTd = document.getElementById(`quntityleft-${foodId}`);
+            totalTd.innerHTML = data.editOneFood.quantety + " المتبقي";
+          }
+
                         // $("#finalcost").text();
                         // $("#totalprice").text();
                     })
@@ -825,8 +972,14 @@
                 })
                     .then(response => response.json())
                     .then(data => {
+                        
                         console.log(data.foodItem.quantity)
                         getprices(invoiceId)
+                        if (!data.editOneFood.unlimit) {
+            const totalTd = document.getElementById(`quntityleft-${foodId}`);
+            totalTd.innerHTML = data.editOneFood.quantety + " المتبقي";
+          }
+
                         // $("#finalcost").text();
                         // $("#totalprice").text();
                     })
@@ -867,6 +1020,11 @@
                     .then(data => {
                         console.log(data.foodItem.quantity)
                         getprices(invoiceId)
+                        if (!data.editOneFood.unlimit) {
+            const totalTd = document.getElementById(`quntityleft-${foodId}`);
+            totalTd.innerHTML = data.editOneFood.quantety + " المتبقي";
+          }
+
                         // $("#finalcost").text();
                         // $("#totalprice").text();
                     })

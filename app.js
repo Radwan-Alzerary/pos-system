@@ -18,6 +18,8 @@ require("./models/user");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
+const paymentType = require("./models/paymentType");
+const storge = require("./models/storge");
 
 // const Visitor = require('./models/visitor');
 
@@ -45,6 +47,60 @@ app.use(cors());
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+const defaultPayment = [{ name: "نقدي" }, { name: "اجل" }];
+
+paymentType
+  .countDocuments()
+  .then((count) => {
+    if (count === 0) {
+      // Create default documents using a forEach loop
+      defaultPayment.forEach((customerItem, index) => {
+        const defaultpaymentType = new paymentType(customerItem);
+        defaultpaymentType
+          .save()
+          .then(() => {
+            console.log(`defaultpaymentType ${index + 1} created.`);
+          })
+          .catch((err) => {
+            console.error(
+              `Error creating defaultpaymentType ${index + 1}:`,
+              err
+            );
+          });
+      });
+    }
+  })
+  .catch((err) => {
+    console.error("Error checking Customer collection:", err);
+  });
+
+  const defaultStorges = [{ name: "معدات" }, { name: "منتجات" }];
+  storge
+  .countDocuments()
+  .then((count) => {
+    if (count === 0) {
+      // Create default documents using a forEach loop
+      defaultStorges.forEach((customerItem, index) => {
+        const defaultStorge = new storge(customerItem);
+        defaultStorge
+          .save()
+          .then(() => {
+            console.log(`defaultStorge ${index + 1} created.`);
+          })
+          .catch((err) => {
+            console.error(
+              `Error creating defaultStorge ${index + 1}:`,
+              err
+            );
+          });
+      });
+    }
+  })
+  .catch((err) => {
+    console.error("Error checking Customer collection:", err);
+  });
+
 
 app.use(require("./routes"));
 

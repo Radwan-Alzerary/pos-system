@@ -6,6 +6,7 @@ const InvoiceSchema = new mongoose.Schema({
     },
     type: { type: String },
     active: { type: Boolean },
+    deleted: { type: Boolean,default:false },
     foodcost: {type: Number},
     fullcost: { type: Number },
     fulldiscont: { type: Number },
@@ -16,6 +17,7 @@ const InvoiceSchema = new mongoose.Schema({
     food: [{
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Food' },
         quantity: { type: Number },
+        foodCost:{type:Number},
         discount: { type: Number },
         discountType: { type: String }
     }],

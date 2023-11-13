@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Category = require("../models/category");
+const Storge = require("../models/storge");
 const Food = require("../models/food");
 const foodcontroll = require("../controllers/food.controll")
 const multer = require('multer');
@@ -20,9 +20,8 @@ const storage = multer.diskStorage({
 // Create multer instance for uploading image
 const upload = multer({ storage: storage });
 router.get('/', async (req, res) => {
-  const category = await Category.find().populate("foods");
-  console.log(category)
-  res.render('storge', { category });
+  const storge = await Storge.find()
+  res.render('storge', { storge });
 })
 
 

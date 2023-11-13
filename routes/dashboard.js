@@ -5,6 +5,7 @@ const foodcontroll = require("../controllers/food.controll")
 const multer = require('multer');
 const fs = require('fs');
 
+
 // Set up multer storage engine for image upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -17,12 +18,14 @@ const storage = multer.diskStorage({
   }
 });
 
+
 // Create multer instance for uploading image
 const upload = multer({ storage: storage });
 router.get('/', async (req, res) => {
   const category = await Category.find().populate("foods");
+  const food = await Food.find({ quantety: { $gte: 0, $lte: 5 },unlimit:false });
   console.log(category)
-  res.render('dashboard', { category });
+  res.render('dashboard', { category, food });
 })
 
 

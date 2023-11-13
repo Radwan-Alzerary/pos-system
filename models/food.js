@@ -24,6 +24,7 @@ const FoodSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    barcode: { type: String },
     addeduse: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -39,6 +40,10 @@ const FoodSchema = new mongoose.Schema(
     discount: {
       type: Number,
       default: 0,
+    },
+    storge: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "storge",
     },
   },
   {

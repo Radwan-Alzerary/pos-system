@@ -2,17 +2,13 @@ const router = require('express').Router();
 const Setting = require("../models/pagesetting");
 const Invoice = require("../models/invoice");
 const Food = require("../models/food");
+const Category = require('../models/category');
 
 router.get('/', async (req, res) => {
-  const setting = await Setting.find();
-
-
-  if (setting.length < 1) {
-    const newSetting = new Setting({});
-    // await newSetting.save();
-  }
-
-  res.render('dashboard');
+  const category = await Category.find().populate("foods");
+  const food = await Food.find({ quantety: { $gte: 0, $lte: 5 },unlimit:false });
+  console.log(category)
+  res.render('dashboard', { category, food });
 })
 
 router.get('/updateinvoicecost', async (req, res) => {
